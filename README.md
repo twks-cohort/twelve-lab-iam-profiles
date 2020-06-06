@@ -18,3 +18,4 @@ Both have full ReadOnly access to all resources and settings and are able to ass
 
 While this is in the early stages, a simplified hierarchy will help limit the amount of operational overhead. We must all exercise respect for the level of permissions granted to the entire team, but with the real power in the assumed role, actual change must be intentional.
 -
+-
