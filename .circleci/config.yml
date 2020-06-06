@@ -1,0 +1,31 @@
+---
+version: 2.1
+
+orbs:
+  terraform: feedyard/terraform@dev:latest
+
+on-push-master: &on-push-master
+  branches:
+    only: /master/
+  tags:
+    ignore: /.*/
+
+on-tag-master: &on-tag-master
+  branches:
+    ignore: /.*/
+  tags:
+    only: /.*/
+
+workflows:
+  version: 2
+  ztw-iam-profiles-pipeline:
+    jobs:
+      - terraform/plan:
+          shell: secrethub run -- /bin/sh -eo pipefail
+          workspace: nonprod
+          var-file: accounts/nonprod.json
+          before-terraform:
+            - run:
+                name: setup app.terraform.io credentials
+                command: secrethub inject -i terraformrc.tpl -o ~/.terraformrc
+
