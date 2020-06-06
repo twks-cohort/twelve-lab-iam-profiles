@@ -21,6 +21,7 @@ workflows:
   ztw-iam-profiles-pipeline:
     jobs:
       - terraform/plan:
+          context: ZTW
           shell: secrethub run -- /bin/sh -eo pipefail
           workspace: nonprod
           var-file: accounts/nonprod.json
