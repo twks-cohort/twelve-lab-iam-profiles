@@ -22,6 +22,7 @@ workflows:
 
     jobs:
       - terraform/plan:
+          name: master-and-nonprod-change-plan
           context: ZTW
           shell: secrethub run -- /bin/sh -eo pipefail
           workspace: master
@@ -35,6 +36,8 @@ workflows:
       
       - approve-master-and-nonprod-changes:
           type: approval
+          requires:
+            - master-and-nonprod-change-plan
 
       - terraform/apply:
           context: ZTW
@@ -51,5 +54,8 @@ workflows:
             - run:
                 name: test master account changes
                 command: secrethub run -- bats test
+            - run:
+                name: write service account credentials
+                command: bash write_service_account_credentials.sh
           requires:
             - approve-master-and-nonprod-changes

@@ -40,12 +40,12 @@ EOF
 }
 
 # service accounts
-resource "aws_iam_user" "DPSAWSUser" {
-  name = "DPSAWSUser"
+resource "aws_iam_user" "DPSSimpleServiceAccount" {
+  name = "DPSSimpleServiceAccount"
   path = "/"
 }
 
-resource "aws_iam_access_key" "DPSAWSUser" {
-  user    = aws_iam_user.DPSAWSUser.name
+resource "aws_iam_access_key" "DPSSimpleServiceAccount" {
+  user    = aws_iam_user.DPSSimpleServiceAccount.name
   pgp_key = var.twdpsio_gpg_public_key_base64
 }
