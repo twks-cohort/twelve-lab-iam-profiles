@@ -1,43 +1,39 @@
 ![bootstrap](https://img.shields.io/badge/phase-bootstrap-yellow.svg?style=flat)
 # lab-iam-profiles
 
-Lab profile pipeline assumes starting from a minimum manual configuration.
+Assumes starting from greenfield accounts.  
 
-DPS-1  (production)
-DPS-2  (nonprod)
+DPS-1  (prod)  
+DPS-2  (nonprod)  
 
-For bootstrap configuration, each account is manually configured with a single group and user:
+Manual bootstrap configuration in each account of a single group and user:  
 
-Group:
-  bootstrap-iam  # has full iam privileges
-
-User:
-  bootstrap-prod  # or nonprod
+Group: bootstrap-iam  (_iam privileges_)  
+User: bootstrap-_acct_ (_used only for lab-iam-profiles pipeline_)
 
 ## configuration
 
-_for human users_
+_for infividual team members_
 
 DPSTeamMemberGroup : standard group for individual users
 
-DPS account users, after requesting SSO admin access, individual DPS account users create a 
+After requesting SSO admin access, individual DPS account users can create a 
 standard IAM user with access credentials, adding the identity to this group.
 
 _for platform AWS service accounts_
 
 DPSSimpleServiceAccountGroup
 
-Under a 'simplistic' service account configuration, this group is configuraed to enable the  
-service-account members to assume all roles in the participating accounts.  
+Under a 'simplistic' service account configuration, this group is configured to enable the  
+service-account added to assume the roles defined in the participating accounts.  
 
-To start - only two role types are provided:
+To start - only two role types are provided:  
 
 DPSTerraformUser : write/admin  
 DPSReadOnlyUser : read/test  
 
-## initial service account
+### initial service account
 
 DPSAWSUser  
 
 Credentials stored in secrethub.io  
-

@@ -24,14 +24,32 @@ workflows:
       - terraform/plan:
           context: ZTW
           shell: secrethub run -- /bin/sh -eo pipefail
-          workspace: nonprod
-          var-file: accounts/nonprod.json
+          workspace: master
           before-terraform:
             - run:
                 name: setup app.terraform.io credentials from secrets
                 command: secrethub inject -i terraformrc.tpl -o ~/.terraformrc
             - run:
-                name: setup tfvars from secrets
+                name: setup auto.tfvars from secrets
                 command: secrethub inject -i master.auto.tfvars.json.tpl -o master.auto.tfvars.json
+      
+      - approve-master-and-nonprod-changes:
+          type: approval
 
-
+      - terraform/apply:
+          context: ZTW
+          shell: secrethub run -- /bin/sh -eo pipefail
+          workspace: master
+          before-terraform:
+            - run:
+                name: setup app.terraform.io credentials from secrets
+                command: secrethub inject -i terraformrc.tpl -o ~/.terraformrc
+            - run:
+                name: setup auto.tfvars from secrets
+                command: secrethub inject -i master.auto.tfvars.json.tpl -o master.auto.tfvars.json
+          after-terraform:
+            - run:
+                name: test master account changes
+                command: secrethub run -- bats test
+          requires:
+            - approve-master-and-nonprod-changes

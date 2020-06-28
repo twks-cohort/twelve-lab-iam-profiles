@@ -47,13 +47,5 @@ resource "aws_iam_user" "DPSAWSUser" {
 
 resource "aws_iam_access_key" "DPSAWSUser" {
   user    = aws_iam_user.DPSAWSUser.name
-  pgp_key = var.twdpsio_pgp_public_key
-}
-
-output "id" {
-  value = aws_iam_access_key.DPSAWSUser.id
-}
-
-output "secret" {
-  value = aws_iam_access_key.DPSAWSUser.encrypted_secret
+  pgp_key = var.twdpsio_gpg_public_key_base64
 }
