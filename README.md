@@ -1,20 +1,42 @@
 ![bootstrap](https://img.shields.io/badge/phase-bootstrap-yellow.svg?style=flat)
-# ztw-iam-profiles
+# lab-iam-profiles
 
-Current Version:  
+Lab profile pipeline assumes starting from a minimum manual configuration.
 
-Uses a single AWS account to provide a development-only environment. Will update configuration to support multiple accounts as that becomes necessary.  
+DPS-1  (production)
+DPS-2  (nonprod)
 
-Note: the `bootstrap` badge indicates automation that is required before standard ways of working are possible. In this case, one cannot assume a role without first creating the necessary policies, groups, etc. For now the, this access-and-permissions pipeline will use a twdps/di static machine identity from a bootstrap role with appropriate permission.
+For bootstrap configuration, each account is manually configured with a single group and user:
+
+Group:
+  bootstrap-iam  # has full iam privileges
+
+User:
+  bootstrap-prod  # or nonprod
 
 ## configuration
 
-Creates two groups:  
+_for human users_
 
-ztw-devs
-ztw-machine-accounts
+DPSTeamMemberGroup : standard group for individual users
 
-Both have full ReadOnly access to all resources and settings and are able to assume the ZTWTerraformRole
+DPS account users, after requesting SSO admin access, individual DPS account users create a 
+standard IAM user with access credentials, adding the identity to this group.
 
-While this is in the early stages, a simplified hierarchy will help limit the amount of operational overhead. We must all exercise respect for the level of permissions granted to the entire team, but with the real power in the assumed role, actual change must be intentional.
--
+_for platform AWS service accounts_
+
+DPSSimpleServiceAccountGroup
+
+Under a 'simplistic' service account configuration, this group is configuraed to enable the  
+service-account members to assume all roles in the participating accounts.  
+
+To start - only two role types are provided:
+
+DPSTerraformUser : write/admin  
+DPSReadOnlyUser : read/test  
+
+## initial service account
+
+DPSAWSUser  
+
+Credentials stored in secrethub.io  

@@ -18,7 +18,7 @@ on-tag-master: &on-tag-master
 
 workflows:
   version: 2
-  ztw-iam-profiles-pipeline:
+  lab-iam-profiles-pipeline:
     jobs:
       - terraform/plan:
           context: ZTW
@@ -27,6 +27,9 @@ workflows:
           var-file: accounts/nonprod.json
           before-terraform:
             - run:
-                name: setup app.terraform.io credentials
+                name: setup app.terraform.io credentials from secrets
                 command: secrethub inject -i terraformrc.tpl -o ~/.terraformrc
+            - run:
+                name: setup tfvars from secrets
+                command: secrethub inject -i master.auto.tfvars.json.tpl -o master.auto.tfvars.json
 

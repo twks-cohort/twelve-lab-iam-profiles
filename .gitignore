@@ -1,2 +1,4 @@
 local.env
-.terraform
+.terraform*
+master.auto.tfvars.json
+

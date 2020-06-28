@@ -1,53 +1,59 @@
-# ReadOnly Role
-resource "aws_iam_policy" "ReadonlyRolePolicy" {
-  name = "ZTWReadOnlyRolePolicy"
-  path = "/"
-  policy = file("./policy/ReadOnlyRolePolicy_1.0.json")
+# default user group
+resource "aws_iam_group" "DPSTeamMemberGroup" {
+  name = "DPSTeamMemberGroup"
 }
 
-resource "aws_iam_role" "ReadOnlyRole" {
-  name = "ZTWReadOnlyRole"
-  assume_role_policy = <<EOF
+resource "aws_iam_group_policy_attachment" "attach_ReadOnlyAccess" {
+  group      = aws_iam_group.DPSTeamMemberGroup.name
+  policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+}
+
+# simplified service account group
+#
+# in this configuration, the service account group is configured to let
+# the svc accout assume multiple roles based on need
+resource "aws_iam_group" "DPSSimpleServiceAccountGroup" {
+  name = "DPSSimpleServiceAccountGroup"
+}
+
+resource "aws_iam_group_policy" "AssumeDPSSimpleServiceAccountRolePolicy" {
+  name = "AssumeDPSSimpleServiceAccountRolePolicy"
+  group = aws_iam_group.DPSSimpleServiceAccountGroup.id
+
+  policy = <<EOF
 {
   "Version": "2012-10-17",
-  "Statement": {
-    "Effect": "Allow",
-    "Principal": { "AWS": "arn:aws:iam::${var.account_id}:root" },
-    "Action": "sts:AssumeRole"
-  }
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": "sts:AssumeRole",
+      "Resource": [
+        "arn:aws:iam::${var.nonprod_account_id}:role/DPSTerraformRole",
+        "arn:aws:iam::${var.nonprod_account_id}:role/DPSReadOnlyRole",
+        "arn:aws:iam::${var.prod_account_id}:role/DPSTerraformRole",
+        "arn:aws:iam::${var.prod_account_id}:role/DPSReadOnlyRole"
+      ]
+    }
+  ]
 }
 EOF
 }
 
-resource "aws_iam_policy_attachment" "attachment_readonly_role_readonly_role" {
-  name = "readonly_policy_attachment"
-  roles = [aws_iam_role.ReadOnlyRole.name]
-  policy_arn = aws_iam_policy.ReadonlyRolePolicy.arn
-}
-
-# Terraform User Role
-resource "aws_iam_policy" "TerraformRolePolicy" {
-  name = "ZTWTerraformRolePolicy"
+# service accounts
+resource "aws_iam_user" "DPSAWSUser" {
+  name = "DPSAWSUser"
   path = "/"
-  policy = file("./policy/TerraformRolePolicy_1.0.json")
 }
 
-resource "aws_iam_role" "TerraformRole" {
-  name = "ZTWTerraformRole"
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": {
-    "Effect": "Allow",
-    "Principal": { "AWS": "arn:aws:iam::${var.account_id}:root" },
-    "Action": "sts:AssumeRole"
-  }
-}
-EOF
+resource "aws_iam_access_key" "DPSAWSUser" {
+  user    = aws_iam_user.DPSAWSUser.name
+  pgp_key = var.twdpsio_pgp_public_key
 }
 
-resource "aws_iam_policy_attachment" "attachment_terraform_role_policy_to_terraform_role" {
-  name = "terraform_policy_attachment"
-  roles = [aws_iam_role.TerraformRole.name]
-  policy_arn = aws_iam_policy.TerraformRolePolicy.arn
+output "id" {
+  value = aws_iam_access_key.DPSAWSUser.id
+}
+
+output "secret" {
+  value = aws_iam_access_key.DPSAWSUser.encrypted_secret
 }

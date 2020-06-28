@@ -4,7 +4,6 @@
     {
       "Effect": "Allow",
       "NotAction": [
-        "iam:*",
         "organizations:*"
       ],
       "Resource": "*"

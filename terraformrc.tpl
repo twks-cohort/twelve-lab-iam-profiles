@@ -1,3 +1,3 @@
 credentials "app.terraform.io" {
-  token = "{{ ztw/v1/nonprod/mac/terraform-cloud/team-api-token }}"
+  token = "{{ twdps/di/svc/terraform-cloud/team-api-token }}"
 }
