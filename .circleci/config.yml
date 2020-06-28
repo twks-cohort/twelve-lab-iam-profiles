@@ -45,11 +45,14 @@ workflows:
           workspace: master
           before-terraform:
             - run:
-                name: setup app.terraform.io credentials from secrets
-                command: secrethub inject -i terraformrc.tpl -o ~/.terraformrc
-            - run:
-                name: setup auto.tfvars from secrets
-                command: secrethub inject -i master.auto.tfvars.json.tpl -o master.auto.tfvars.json
+                name: setup credentials from secrets
+                command: |
+                  secrethub inject -i terraformrc.tpl -o ~/.terraformrc
+                  secrethub inject -i master.auto.tfvars.json.tpl -o master.auto.tfvars.json
+                  secrethub inject -i public.key.tpl -o .public.key
+                  secrethub inject -i private.key.tpl -o .private.key
+                  gpg --import .public.key
+                  gpg --import .private.key
           after-terraform:
             - run:
                 name: test master account changes
