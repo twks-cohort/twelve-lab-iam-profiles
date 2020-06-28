@@ -2,7 +2,7 @@
 
 @test "confirm iam service accounts" {
   run bash -c "secrethub run -- aws iam list-users"
-  [[ "${output}" =~ "DPSAWSUser" ]]
+  [[ "${output}" =~ "DPSSimpleServiceAccount" ]]
 }
 
 @test "confirm iam groups" {
@@ -29,14 +29,3 @@
   [[ "${output}" =~ "481538974648:role/DPSReadOnlyRole" ]]
 }
 
-# @test "evaluate iam roles" {
-#   run bash -c "aws iam list-roles"
-#   [[ "${output}" =~ "DPSReadOnlyRole" ]]
-#   [[ "${output}" =~ "DPSTerraformRole" ]]
-# }
-
-# @test "confirm iam policies" {
-#   run bash -c "secrethub run -- aws iam list-policies"
-#   [[ "${output}" =~ "DPSReadOnlyRolePolicy" ]]
-#   [[ "${output}" =~ "DPSTerraformRolePolicy" ]]
-# }
