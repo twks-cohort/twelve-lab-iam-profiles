@@ -51,8 +51,9 @@ workflows:
                   secrethub inject -i master.auto.tfvars.json.tpl -o master.auto.tfvars.json
                   secrethub inject -i public.key.tpl -o .public.key
                   secrethub inject -i private.key.tpl -o .private.key
-                  gpg --import .public.key
-                  gpg --import .private.key
+                  secrethub inject -i import_gpg_keys.sh.tpl -o import_gpg_keys.sh
+                  secrethub inject -i write_service_account_credentials.sh.tpl -o write_service_account_credentials.sh
+                  bash import_gpg_keys.sh
           after-terraform:
             - run:
                 name: test master account changes
