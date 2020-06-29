@@ -34,6 +34,7 @@ workflows:
             - run:
                 name: setup auto.tfvars from secrets
                 command: secrethub inject -i master.auto.tfvars.json.tpl -o master.auto.tfvars.json
+          filters: *on-push-master
 
       - terraform/plan:
           name: nonprod-change-plan
@@ -46,12 +47,14 @@ workflows:
             - run:
                 name: setup app.terraform.io credentials from secrets
                 command: secrethub inject -i terraformrc.tpl -o ~/.terraformrc
+          filters: *on-push-master
 
       - approve-master-and-nonprod-changes:
           type: approval
           requires:
             - master-change-plan
             - nonprod-change-plan
+          filters: *on-push-master
 
       - terraform/apply:
           context: ZTW
@@ -77,3 +80,37 @@ workflows:
                 command: bash write_service_account_credentials.sh
           requires:
             - approve-master-and-nonprod-changes
+          filters: *on-push-master
+
+      # git push = plan prod-role changes
+      - terraform/plan:
+          name: prod-change-plan
+          context: ZTW
+          shell: secrethub run --env-file secrethub.prod -- /bin/sh -eo pipefail
+          workspace: prod
+          working-directory: roles
+          var-file: accounts/prod.json
+          before-terraform:
+            - run:
+                name: setup app.terraform.io credentials from secrets
+                command: secrethub inject -i terraformrc.tpl -o ~/.terraformrc
+          filters: *on-tag-master
+
+      - approve-prod-changes:
+          type: approval
+          requires:
+            - prod-change-plan
+          filters: *on-tag-master
+
+      - terraform/apply:
+          name: prod-change-apply
+          context: ZTW
+          shell: secrethub run --env-file secrethub.prod -- /bin/sh -eo pipefail
+          workspace: nonprod
+          working-directory: roles
+          var-file: accounts/prod.json
+          before-terraform:
+            - run:
+                name: setup app.terraform.io credentials from secrets
+                command: secrethub inject -i terraformrc.tpl -o ~/.terraformrc
+          filters: *on-tag-master
