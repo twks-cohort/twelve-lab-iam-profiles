@@ -21,8 +21,9 @@ workflows:
   lab-iam-profiles-pipeline:
 
     jobs:
+      # git push = plan master-profile and nonprod-role changes
       - terraform/plan:
-          name: master-and-nonprod-change-plan
+          name: master-change-plan
           context: ZTW
           shell: secrethub run -- /bin/sh -eo pipefail
           workspace: master
@@ -33,11 +34,24 @@ workflows:
             - run:
                 name: setup auto.tfvars from secrets
                 command: secrethub inject -i master.auto.tfvars.json.tpl -o master.auto.tfvars.json
-      
+
+      - terraform/plan:
+          name: nonprod-change-plan
+          context: ZTW
+          shell: secrethub run --env-file secrethub-nonprod.env -- /bin/sh -eo pipefail
+          workspace: nonprod
+          working-directory: roles
+          var-file: accounts/nonprod.json
+          before-terraform:
+            - run:
+                name: setup app.terraform.io credentials from secrets
+                command: secrethub inject -i terraformrc.tpl -o ~/.terraformrc
+
       - approve-master-and-nonprod-changes:
           type: approval
           requires:
-            - master-and-nonprod-change-plan
+            - master-change-plan
+            - nonprod-change-plan
 
       - terraform/apply:
           context: ZTW
