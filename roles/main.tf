@@ -26,11 +26,11 @@ resource "aws_iam_policy_attachment" "attachment_DPSTerraformRolePolicy_to_DPSTe
 }
 
 # ReadOnly Role
-resource "aws_iam_policy" "DPSReadonlyRolePolicy" {
-  name = "DPSReadOnlyRolePolicy"
-  path = "/"
-  policy = file("./policy/ReadOnlyRolePolicy_1.0.json")
-}
+# resource "aws_iam_policy" "DPSReadonlyRolePolicy" {
+#   name = "DPSReadOnlyRolePolicy"
+#   path = "/"
+#   policy = file("./policy/ReadOnlyRolePolicy_1.0.json")
+# }
 
 resource "aws_iam_role" "DPSReadOnlyRole" {
   name = "DPSReadOnlyRole"
@@ -49,5 +49,5 @@ EOF
 resource "aws_iam_policy_attachment" "attachment_DPSReadonlyRolePolicy_to_DPSReadOnlyRole" {
   name = "DPSReadonlyRolePolicy_attachment"
   roles = [aws_iam_role.DPSReadOnlyRole.name]
-  policy_arn = aws_iam_policy.DPSReadonlyRolePolicy.arn
+  policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
 }
