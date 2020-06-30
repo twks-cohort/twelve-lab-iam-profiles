@@ -45,8 +45,10 @@ workflows:
           var-file: accounts/nonprod.json
           before-terraform:
             - run:
-                name: setup app.terraform.io credentials from secrets
-                command: secrethub inject -i terraformrc.tpl -o ~/.terraformrc
+                name: setup credentials from secrets
+                command: |
+                  secrethub inject -i account.auto.tfvars.json.tpl -o account.auto.tfvars.json
+                  secrethub inject -i terraformrc.tpl -o ~/.terraformrc
           filters: *on-push-master
 
       - approve-master-and-nonprod-changes:
@@ -92,8 +94,10 @@ workflows:
           var-file: accounts/nonprod.json
           before-terraform:
             - run:
-                name: setup app.terraform.io credentials from secrets
-                command: secrethub inject -i terraformrc.tpl -o ~/.terraformrc
+                name: setup credentials from secrets
+                command: |
+                  secrethub inject -i account.auto.tfvars.json.tpl -o account.auto.tfvars.json
+                  secrethub inject -i terraformrc.tpl -o ~/.terraformrc
           after-terraform:
             - run:
                 name: test nonprod account changes
@@ -112,8 +116,10 @@ workflows:
           var-file: accounts/prod.json
           before-terraform:
             - run:
-                name: setup app.terraform.io credentials from secrets
-                command: secrethub inject -i terraformrc.tpl -o ~/.terraformrc
+                name: setup credentials from secrets
+                command: |
+                  secrethub inject -i account.auto.tfvars.json.tpl -o account.auto.tfvars.json
+                  secrethub inject -i terraformrc.tpl -o ~/.terraformrc
           filters: *on-tag-master
 
       - approve-prod-changes:
@@ -131,8 +137,10 @@ workflows:
           var-file: accounts/prod.json
           before-terraform:
             - run:
-                name: setup app.terraform.io credentials from secrets
-                command: secrethub inject -i terraformrc.tpl -o ~/.terraformrc
+                name: setup credentials from secrets
+                command: |
+                  secrethub inject -i account.auto.tfvars.json.tpl -o account.auto.tfvars.json
+                  secrethub inject -i terraformrc.tpl -o ~/.terraformrc
           after-terraform:
             - run:
                 name: test nonprod account changes
