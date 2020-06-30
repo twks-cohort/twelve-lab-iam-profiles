@@ -20,4 +20,4 @@ provider "aws" {
 
 variable "aws_region" {}
 
-variable "account_id" {}
+variable "master_account_id" {}
