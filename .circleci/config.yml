@@ -57,6 +57,7 @@ workflows:
           filters: *on-push-master
 
       - terraform/apply:
+          name: master-change-apply
           context: ZTW
           shell: secrethub run -- /bin/sh -eo pipefail
           workspace: master
