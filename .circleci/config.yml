@@ -93,6 +93,8 @@ workflows:
             - run:
                 name: setup app.terraform.io credentials from secrets
                 command: secrethub inject -i terraformrc.tpl -o ~/.terraformrc
+          requires:
+            - approve-master-and-nonprod-changes
           filters: *on-push-master
 
       # git tag = plan prod-role changes
