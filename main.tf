@@ -54,5 +54,4 @@ resource "aws_iam_group_membership" "assume_role_group" {
   name = "DPSSimpleServiceAccountGroupMembership"
   users = ["DPSSimpleServiceAccount"]
   group = "DPSSimpleServiceAccountGroup"
-  depends_on = ["DPSSimpleServiceAccount","DPSSimpleServiceAccountGroup"]
 }
