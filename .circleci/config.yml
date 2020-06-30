@@ -87,7 +87,7 @@ workflows:
       - terraform/apply:
           name: nonprod-change-apply
           context: ZTW
-          shell: secrethub run --env-file roles/secrethub.nonprod -- /bin/sh -eo pipefail
+          shell: secrethub run --env-file nonprod.env -- /bin/sh -eo pipefail
           workspace: nonprod
           working-directory: roles
           before-terraform:
@@ -99,7 +99,7 @@ workflows:
           after-terraform:
             - run:
                 name: test nonprod account changes
-                command: secrethub run --env-file roles/secrethub.nonprod -- bats test
+                command: secrethub run --env-file nonprod.env -- bats test
           requires:
             - approve-master-and-nonprod-changes
           filters: *on-push-master
@@ -108,7 +108,7 @@ workflows:
       - terraform/plan:
           name: prod-change-plan
           context: ZTW
-          shell: secrethub run --env-file roles/secrethub.prod -- /bin/sh -eo pipefail
+          shell: secrethub run --env-file prod.env -- /bin/sh -eo pipefail
           workspace: prod
           working-directory: roles
           before-terraform:
@@ -128,7 +128,7 @@ workflows:
       - terraform/apply:
           name: prod-change-apply
           context: ZTW
-          shell: secrethub run --env-file roles/secrethub.prod -- /bin/sh -eo pipefail
+          shell: secrethub run --env-file prod.env -- /bin/sh -eo pipefail
           workspace: nonprod
           working-directory: roles
           before-terraform:
@@ -140,7 +140,7 @@ workflows:
           after-terraform:
             - run:
                 name: test nonprod account changes
-                command: secrethub run --env-file roles/secrethub.prod --env-file secrethub.prod -- bats test
+                command: secrethub run --env-file prod.env -- bats test
           requires:
             - approve-prod-changes
           filters: *on-tag-master
