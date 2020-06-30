@@ -94,6 +94,10 @@ workflows:
             - run:
                 name: setup app.terraform.io credentials from secrets
                 command: secrethub inject -i terraformrc.tpl -o ~/.terraformrc
+          after-terraform:
+            - run:
+                name: test nonprod account changes
+                command: secrethub run -- bats test
           requires:
             - approve-master-and-nonprod-changes
           filters: *on-push-master
@@ -129,6 +133,10 @@ workflows:
             - run:
                 name: setup app.terraform.io credentials from secrets
                 command: secrethub inject -i terraformrc.tpl -o ~/.terraformrc
+          after-terraform:
+            - run:
+                name: test nonprod account changes
+                command: secrethub run --env-file secrethub.prod -- bats test
           requires:
             - approve-prod-changes
           filters: *on-tag-master
