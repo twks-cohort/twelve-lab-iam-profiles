@@ -42,12 +42,11 @@ workflows:
           shell: secrethub run -- /bin/sh -eo pipefail
           workspace: nonprod
           working-directory: roles
-          var-file: accounts/nonprod.json
           before-terraform:
             - run:
                 name: setup credentials from secrets
                 command: |
-                  secrethub inject -i account.auto.tfvars.json.tpl -o account.auto.tfvars.json
+                  secrethub inject -i roles/account.auto.tfvars.json.tpl -o roles/account.auto.tfvars.json
                   secrethub inject -i terraformrc.tpl -o ~/.terraformrc
           filters: *on-push-master
 
@@ -91,12 +90,11 @@ workflows:
           shell: secrethub run -- /bin/sh -eo pipefail
           workspace: nonprod
           working-directory: roles
-          var-file: accounts/nonprod.json
           before-terraform:
             - run:
                 name: setup credentials from secrets
                 command: |
-                  secrethub inject -i account.auto.tfvars.json.tpl -o account.auto.tfvars.json
+                  secrethub inject -i roles/account.auto.tfvars.json.tpl -o roles/account.auto.tfvars.json
                   secrethub inject -i terraformrc.tpl -o ~/.terraformrc
           after-terraform:
             - run:
@@ -113,12 +111,11 @@ workflows:
           shell: secrethub run --env-file secrethub.prod -- /bin/sh -eo pipefail
           workspace: prod
           working-directory: roles
-          var-file: accounts/prod.json
           before-terraform:
             - run:
                 name: setup credentials from secrets
                 command: |
-                  secrethub inject -i account.auto.tfvars.json.tpl -o account.auto.tfvars.json
+                  secrethub inject -i roles/account.auto.tfvars.json.tpl -o roles/account.auto.tfvars.json
                   secrethub inject -i terraformrc.tpl -o ~/.terraformrc
           filters: *on-tag-master
 
@@ -134,12 +131,11 @@ workflows:
           shell: secrethub run --env-file secrethub.prod -- /bin/sh -eo pipefail
           workspace: nonprod
           working-directory: roles
-          var-file: accounts/prod.json
           before-terraform:
             - run:
                 name: setup credentials from secrets
                 command: |
-                  secrethub inject -i account.auto.tfvars.json.tpl -o account.auto.tfvars.json
+                  secrethub inject -i roles/account.auto.tfvars.json.tpl -o roles/account.auto.tfvars.json
                   secrethub inject -i terraformrc.tpl -o ~/.terraformrc
           after-terraform:
             - run:
