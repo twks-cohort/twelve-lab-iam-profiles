@@ -39,7 +39,7 @@ resource "aws_iam_group_policy" "AssumeDPSSimpleServiceAccountRolePolicy" {
 EOF
 }
 
-# service accounts
+# simplified service account
 resource "aws_iam_user" "DPSSimpleServiceAccount" {
   name = "DPSSimpleServiceAccount"
   path = "/"
@@ -48,4 +48,11 @@ resource "aws_iam_user" "DPSSimpleServiceAccount" {
 resource "aws_iam_access_key" "DPSSimpleServiceAccount" {
   user    = aws_iam_user.DPSSimpleServiceAccount.name
   pgp_key = var.twdpsio_gpg_public_key_base64
+}
+
+resource "aws_iam_group_membership" "assume_role_group" {
+  name = "DPSSimpleServiceAccountGroupMembership"
+  users = ["DPSSimpleServiceAccount"]
+  group = "DPSSimpleServiceAccountGroup"
+  depends_on = ["DPSSimpleServiceAccount","DPSSimpleServiceAccountGroup"]
 }
