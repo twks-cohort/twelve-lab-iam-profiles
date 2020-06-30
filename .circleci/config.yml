@@ -39,7 +39,7 @@ workflows:
       - terraform/plan:
           name: nonprod-change-plan
           context: ZTW
-          shell: secrethub run --env-file ./roles/secrethub.nonprod -- /bin/sh -eo pipefail
+          shell: secrethub run --env-file nonprod.env -- /bin/sh -eo pipefail
           workspace: nonprod
           working-directory: roles
           before-terraform:
