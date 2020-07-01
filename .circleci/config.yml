@@ -99,7 +99,7 @@ workflows:
           after-terraform:
             - run:
                 name: test nonprod account changes
-                command: secrethub run --env-file nonprod.env -- bats test
+                command: secrethub run --env-file nonprod.env -- bats roles/test
           requires:
             - approve-master-and-nonprod-changes
           filters: *on-push-master
@@ -140,7 +140,7 @@ workflows:
           after-terraform:
             - run:
                 name: test nonprod account changes
-                command: secrethub run --env-file prod.env -- bats test
+                command: secrethub run --env-file prod.env -- bats roles/test
           requires:
             - approve-prod-changes
           filters: *on-tag-master
