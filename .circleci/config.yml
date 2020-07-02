@@ -51,7 +51,7 @@ workflows:
             - run:
                 name: setup credentials from secrets
                 command: |
-                  secrethub inject -i tpl/account.auto.tfvars.json.tpl -o roles/account.auto.tfvars.json
+                  secrethub inject -i tpl/nonprod.auto.tfvars.json.tpl -o roles/account.auto.tfvars.json
                   secrethub inject -i tpl/terraformrc.tpl -o ~/.terraformrc
           filters: *on-push-master
 
@@ -99,7 +99,7 @@ workflows:
             - run:
                 name: setup credentials from secrets
                 command: |
-                  secrethub inject -i tpl/account.auto.tfvars.json.tpl -o roles/account.auto.tfvars.json
+                  secrethub inject -i tpl/nonprod.auto.tfvars.json.tpl -o roles/account.auto.tfvars.json
                   secrethub inject -i tpl/terraformrc.tpl -o ~/.terraformrc
           after-terraform:
             - run:
@@ -120,7 +120,7 @@ workflows:
             - run:
                 name: setup credentials from secrets
                 command: |
-                  secrethub inject -i tpl/account.auto.tfvars.json.tpl -o roles/account.auto.tfvars.json
+                  secrethub inject -i tpl/prod.auto.tfvars.json.tpl -o roles/account.auto.tfvars.json
                   secrethub inject -i tpl/terraformrc.tpl -o ~/.terraformrc
           filters: *on-tag-master
 
@@ -140,7 +140,7 @@ workflows:
             - run:
                 name: setup credentials from secrets
                 command: |
-                  secrethub inject -i tpl/account.auto.tfvars.json.tpl -o roles/account.auto.tfvars.json
+                  secrethub inject -i tpl/prod.auto.tfvars.json.tpl -o roles/account.auto.tfvars.json
                   secrethub inject -i tpl/terraformrc.tpl -o ~/.terraformrc
           after-terraform:
             - run:
