@@ -48,10 +48,12 @@ resource "aws_iam_user" "DPSSimpleServiceAccount" {
 resource "aws_iam_access_key" "DPSSimpleServiceAccount" {
   user    = aws_iam_user.DPSSimpleServiceAccount.name
   pgp_key = var.twdpsio_gpg_public_key_base64
+  depends_on = [aws_iam_user.DPSSimpleServiceAccount]
 }
 
 resource "aws_iam_group_membership" "assume_role_group" {
   name = "DPSSimpleServiceAccountGroupMembership"
   users = ["DPSSimpleServiceAccount"]
   group = "DPSSimpleServiceAccountGroup"
+  depends_on = [aws_iam_user.DPSSimpleServiceAccount, aws_iam_group.DPSSimpleServiceAccountGroup]
 }
