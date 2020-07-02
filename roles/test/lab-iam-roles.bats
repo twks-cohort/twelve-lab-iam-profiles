@@ -7,16 +7,16 @@
 }
 
 @test "confirm iam policies" {
-  run bash -c "secrethub run -- aws iam list-policies"
+  run bash -c "aws iam list-policies"
   [[ "${output}" =~ "DPSTerraformRolePolicy" ]]
 }
 
 @test "confirm policy attached to DPSTerraformRole" {
-  run bash -c "secrethub run -- aws iam list-attached-role-policies --role-name DPSTerraformRole"
+  run bash -c "aws iam list-attached-role-policies --role-name DPSTerraformRole"
   [[ "${output}" =~ "DPSTerraformRolePolicy" ]]
 }
 
 @test "confirm policy attached to DPSReadOnlyRole" {
-  run bash -c "secrethub run -- aws iam list-attached-role-policies --role-name DPSReadOnlyRole"
+  run bash -c "aws iam list-attached-role-policies --role-name DPSReadOnlyRole"
   [[ "${output}" =~ "ReadOnlyAccess" ]]
 }

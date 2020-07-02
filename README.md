@@ -1,12 +1,12 @@
 ![bootstrap](https://img.shields.io/badge/phase-bootstrap-yellow.svg?style=flat)
 # lab-iam-profiles
 
-Assumes starting from greenfield accounts.  
+This is the first pipeline applied to a set of greenfield accounts.  
 
 DPS-1  (prod)  
 DPS-2  (nonprod)  
 
-Manual bootstrap configuration in each account of a single group and user:  
+Initial manual bootstrap configuration in each account of a single group and user:  
 
 Group: bootstrap-iam  (_iam privileges_)  
 User: bootstrap-_acct_ (_used only for lab-iam-profiles pipeline_)
@@ -34,8 +34,7 @@ DPSReadOnlyUser : read/test
 
 ### initial service account
 
-DPSAWSUser  
+DPSSimpleServiceAccount  
 
-Credentials stored in secrethub.io  
-
-
+The `master` env steps create the DPSSimpleServiceAccount user in the master account,  
+storing credentials in secrethub.io  
