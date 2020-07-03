@@ -12,11 +12,11 @@
 
 @test "confirm policy attached to DPSTeamMemberGroup" {
   run bash -c "aws iam list-group-policies --group-name DPSTeamMemberGroup"
-  [[ "${output}" =~ "AssumeDPSSimpleServiceAccountRolePolicy" ]]
+  [[ "${output}" =~ "AssumeDPSSimplifiedAccountRolesPolicy" ]]
 }
 
 @test "evaluate policy attached to DPSTeamMemberGroup" {
-  run bash -c "aws iam get-group-policy --policy-name AssumeDPSSimpleServiceAccountRolePolicy --group-name DPSTeamMemberGroup"
+  run bash -c "aws iam get-group-policy --policy-name AssumeDPSSimplifiedAccountRolesPolicy --group-name DPSTeamMemberGroup"
   [[ "${output}" =~ "1693:role/DPSTerraformRole" ]]
   [[ "${output}" =~ "1693:role/DPSReadOnlyRole" ]]
   [[ "${output}" =~ "4648:role/DPSTerraformRole" ]]
