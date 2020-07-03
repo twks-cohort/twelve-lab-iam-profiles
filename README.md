@@ -13,12 +13,27 @@ User: bootstrap-_acct_ (_used only for lab-iam-profiles pipeline_)
 
 ## configuration
 
+Master Account = DPS-1  
+
+DPS-1 will also be the production account. Normally, the master account is a separate account  
+that has a limited set of auth and sec functions. Since DPS only has two accounts, it is  
+pulling double-duty. Not a practice to follow with a client.  
+
+In the master account the following elements are defined:  
+
 _for infividual team members_
 
 DPSTeamMemberGroup : standard group for individual users
 
-After requesting SSO admin access, individual DPS account users can create a 
-standard IAM user with access credentials, adding the identity to this group.
+After requesting SSO admin access, individual DPS AWS account users should create a 
+standard IAM user with access credentials, and add it to the DPSTeamMemberGroup group.  
+
+The team members group is configured to have ReadOnlyAccess to the master account.  
+In addition, this group is   
+
+_again, noting that DPS-1 functions as the prod sub-account, DPS-2 is the nonprod sub-account._
+
+
 
 _for platform AWS service accounts_
 

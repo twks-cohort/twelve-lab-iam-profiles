@@ -1,24 +1,16 @@
-# default user group
+# simplified authorization model
+#
+# a single member group is defined, inclusion enabling the user or
+# service account identity to assume either ReadOnly or Terraform  
+# permissions in both DPS aws accounts
+
 resource "aws_iam_group" "DPSTeamMemberGroup" {
   name = "DPSTeamMemberGroup"
 }
 
-resource "aws_iam_group_policy_attachment" "attach_ReadOnlyAccess" {
-  group      = aws_iam_group.DPSTeamMemberGroup.name
-  policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
-}
-
-# simplified service account group
-#
-# in this configuration, the service account group is configured to let
-# the svc accout assume multiple roles based on need
-resource "aws_iam_group" "DPSSimpleServiceAccountGroup" {
-  name = "DPSSimpleServiceAccountGroup"
-}
-
-resource "aws_iam_group_policy" "AssumeDPSSimpleServiceAccountRolePolicy" {
-  name = "AssumeDPSSimpleServiceAccountRolePolicy"
-  group = aws_iam_group.DPSSimpleServiceAccountGroup.id
+resource "aws_iam_group_policy" "AssumeDPSSimplifiedAccountRolesPolicy" {
+  name = "AssumeDPSSimplifiedAccountRolesPolicy"
+  group = aws_iam_group.DPSTeamMemberGroup.id
 
   policy = <<EOF
 {
@@ -28,10 +20,16 @@ resource "aws_iam_group_policy" "AssumeDPSSimpleServiceAccountRolePolicy" {
       "Effect": "Allow",
       "Action": "sts:AssumeRole",
       "Resource": [
-        "arn:aws:iam::${var.nonprod_account_id}:role/DPSTerraformRole",
         "arn:aws:iam::${var.nonprod_account_id}:role/DPSReadOnlyRole",
-        "arn:aws:iam::${var.prod_account_id}:role/DPSTerraformRole",
-        "arn:aws:iam::${var.prod_account_id}:role/DPSReadOnlyRole"
+        "arn:aws:iam::${var.nonprod_account_id}:role/DPSTerraformRole"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": "sts:AssumeRole",
+      "Resource": [
+        "arn:aws:iam::${var.prod_account_id}:role/DPSReadOnlyRole",
+        "arn:aws:iam::${var.prod_account_id}:role/DPSTerraformRole"
       ]
     }
   ]
@@ -39,7 +37,9 @@ resource "aws_iam_group_policy" "AssumeDPSSimpleServiceAccountRolePolicy" {
 EOF
 }
 
-# simplified service account
+# simplified service account is a general purpose svc account
+# used for all pipeline orchestration. Not recommended where
+# there are multiple teams such as on client engagements
 resource "aws_iam_user" "DPSSimpleServiceAccount" {
   name = "DPSSimpleServiceAccount"
   path = "/"
@@ -51,9 +51,24 @@ resource "aws_iam_access_key" "DPSSimpleServiceAccount" {
   depends_on = [aws_iam_user.DPSSimpleServiceAccount]
 }
 
-resource "aws_iam_group_membership" "assume_role_group" {
+resource "aws_iam_group_membership" "DPSSimpleServiceAccountGroup" {
   name = "DPSSimpleServiceAccountGroupMembership"
-  users = ["DPSSimpleServiceAccount"]
-  group = "DPSSimpleServiceAccountGroup"
-  depends_on = [aws_iam_user.DPSSimpleServiceAccount, aws_iam_group.DPSSimpleServiceAccountGroup]
+  users = [aws_iam_user.DPSSimpleServiceAccount.name]
+  group = aws_iam_group.DPSTeamMemberGroup.name
+  depends_on = [aws_iam_user.DPSSimpleServiceAccount, aws_iam_group.DPSTeamMemberGroup]
 }
+
+
+
+# resource "aws_iam_group_policy_attachment" "attach_ReadOnlyAccess" {
+#   group      = aws_iam_group.DPSTeamMemberGroup.name
+#   policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+# }
+
+# simplified service account group
+#
+# in this configuration, the service account group is configured to let
+# the svc accout assume multiple roles based on need
+# resource "aws_iam_group" "DPSSimpleServiceAccountGroup" {
+#   name = "DPSSimpleServiceAccountGroup"
+# }
