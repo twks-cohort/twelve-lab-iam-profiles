@@ -2,7 +2,7 @@
 version: 2.1
 
 orbs:
-  terraform: feedyard/terraform@dev:latest
+  terraform: feedyard/terraform@0.1.0
 
 on-push-master: &on-push-master
   branches:
@@ -34,11 +34,10 @@ workflows:
           workspace: master
           before-terraform:
             - run:
-                name: setup app.terraform.io credentials from secrets
-                command: secrethub inject -i tpl/terraformrc.tpl -o ~/.terraformrc
-            - run:
-                name: setup auto.tfvars from secrets
-                command: secrethub inject -i tpl/master.auto.tfvars.json.tpl -o master.auto.tfvars.json
+                name: generate environmental configuration and credentials from templates
+                command: |
+                  secrethub inject -i tpl/terraformrc.tpl -o ~/.terraformrc
+                  secrethub inject -i tpl/master.auto.tfvars.json.tpl -o master.auto.tfvars.json
           filters: *on-push-master
 
       - terraform/plan:
@@ -49,10 +48,10 @@ workflows:
           working-directory: roles
           before-terraform:
             - run:
-                name: setup credentials from secrets
+                name: generate environmental configuration and credentials from templates
                 command: |
-                  secrethub inject -i tpl/subaccount.auto.tfvars.json.tpl -o roles/subaccount.auto.tfvars.json
                   secrethub inject -i tpl/terraformrc.tpl -o ~/.terraformrc
+                  secrethub inject -i tpl/subaccount.auto.tfvars.json.tpl -o roles/subaccount.auto.tfvars.json
           filters: *on-push-master
 
       - approve-master-and-nonprod-changes:
@@ -69,7 +68,7 @@ workflows:
           workspace: master
           before-terraform:
             - run:
-                name: setup credentials from secrets
+                name: generate environmental configuration and credentials from templates
                 command: |
                   secrethub inject -i tpl/terraformrc.tpl -o ~/.terraformrc
                   secrethub inject -i tpl/master.auto.tfvars.json.tpl -o master.auto.tfvars.json
@@ -97,10 +96,10 @@ workflows:
           working-directory: roles
           before-terraform:
             - run:
-                name: setup credentials from secrets
+                name: generate environmental configuration and credentials from templates
                 command: |
-                  secrethub inject -i tpl/subaccount.auto.tfvars.json.tpl -o roles/subaccount.auto.tfvars.json
                   secrethub inject -i tpl/terraformrc.tpl -o ~/.terraformrc
+                  secrethub inject -i tpl/subaccount.auto.tfvars.json.tpl -o roles/subaccount.auto.tfvars.json
           after-terraform:
             - run:
                 name: test nonprod account changes
@@ -118,10 +117,10 @@ workflows:
           working-directory: roles
           before-terraform:
             - run:
-                name: setup credentials from secrets
+                name: generate environmental configuration and credentials from templates
                 command: |
-                  secrethub inject -i tpl/subaccount.auto.tfvars.json.tpl -o roles/subaccount.auto.tfvars.json
                   secrethub inject -i tpl/terraformrc.tpl -o ~/.terraformrc
+                  secrethub inject -i tpl/subaccount.auto.tfvars.json.tpl -o roles/subaccount.auto.tfvars.json
           filters: *on-tag-master
 
       - approve-prod-changes:
@@ -138,10 +137,10 @@ workflows:
           working-directory: roles
           before-terraform:
             - run:
-                name: setup credentials from secrets
+                name: generate environmental configuration and credentials from templates
                 command: |
-                  secrethub inject -i tpl/subaccount.auto.tfvars.json.tpl -o roles/subaccount.auto.tfvars.json
                   secrethub inject -i tpl/terraformrc.tpl -o ~/.terraformrc
+                  secrethub inject -i tpl/subaccount.auto.tfvars.json.tpl -o roles/subaccount.auto.tfvars.json
           after-terraform:
             - run:
                 name: test nonprod account changes
