@@ -12,7 +12,7 @@ resource "aws_iam_role" "DPSTerraformRole" {
   "Version": "2012-10-17",
   "Statement": {
     "Effect": "Allow",
-    "Principal": { "AWS": "arn:aws:iam::${var.master_account_id}:root" },
+    "Principal": { "AWS": "arn:aws:iam::${var.nonprod_account_id}:root" },
     "Action": "sts:AssumeRole"
   }
 }
@@ -33,7 +33,7 @@ resource "aws_iam_role" "DPSReadOnlyRole" {
   "Version": "2012-10-17",
   "Statement": {
     "Effect": "Allow",
-    "Principal": { "AWS": "arn:aws:iam::${var.master_account_id}:root" },
+    "Principal": { "AWS": "arn:aws:iam::${var.nonprod_account_id}:root" },
     "Action": "sts:AssumeRole"
   }
 }

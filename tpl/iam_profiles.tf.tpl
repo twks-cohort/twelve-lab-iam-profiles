@@ -51,24 +51,16 @@ resource "aws_iam_access_key" "DPSSimpleServiceAccount" {
   depends_on = [aws_iam_user.DPSSimpleServiceAccount]
 }
 
-resource "aws_iam_group_membership" "DPSSimpleServiceAccountGroup" {
-  name = "DPSSimpleServiceAccountGroupMembership"
-  users = [aws_iam_user.DPSSimpleServiceAccount.name]
-  group = aws_iam_group.DPSTeamMemberGroup.name
+resource "aws_iam_user_group_membership" "DPSSimpleServiceAccount" {
+  user = aws_iam_user.DPSSimpleServiceAccount.name
+  groups = [aws_iam_group.DPSTeamMemberGroup.name]
   depends_on = [aws_iam_user.DPSSimpleServiceAccount, aws_iam_group.DPSTeamMemberGroup]
 }
+
 
 
 
 # resource "aws_iam_group_policy_attachment" "attach_ReadOnlyAccess" {
 #   group      = aws_iam_group.DPSTeamMemberGroup.name
 #   policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
-# }
-
-# simplified service account group
-#
-# in this configuration, the service account group is configured to let
-# the svc accout assume multiple roles based on need
-# resource "aws_iam_group" "DPSSimpleServiceAccountGroup" {
-#   name = "DPSSimpleServiceAccountGroup"
 # }

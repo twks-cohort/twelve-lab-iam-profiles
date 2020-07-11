@@ -4,23 +4,19 @@ version: 2.1
 orbs:
   terraform: feedyard/terraform@0.1.0
 
+# git push: plan, release, test nonprod account changes
 on-push-master: &on-push-master
   branches:
     only: /master/
   tags:
     ignore: /.*/
 
+# git tag: plan, release, test prod account changes
 on-tag-master: &on-tag-master
   branches:
     ignore: /.*/
   tags:
     only: /.*/
-
-# git push:
-# run: terraform plan, approve, and terraform apply to release master and nonprod account changes 
-#
-# git tag:
-# run: terraform plan, approve, and terraform apply to productino account changes
 
 workflows:
   version: 2
@@ -28,64 +24,23 @@ workflows:
 
     jobs:
       - terraform/plan:
-          name: master-change-plan
-          context: ZTW
-          shell: secrethub run --env-file secrethub.master.env -- /bin/sh -eo pipefail
-          workspace: master
-          before-terraform:
-            - run:
-                name: generate environmental configuration and credentials from templates
-                command: |
-                  secrethub inject -i tpl/terraformrc.tpl -o ~/.terraformrc
-                  secrethub inject -i tpl/master.auto.tfvars.json.tpl -o master.auto.tfvars.json
-          filters: *on-push-master
-
-      - terraform/plan:
           name: nonprod-change-plan
           context: ZTW
           shell: secrethub run --env-file secrethub.nonprod.env -- /bin/sh -eo pipefail
           workspace: nonprod
-          working-directory: roles
           before-terraform:
             - run:
                 name: generate environmental configuration and credentials from templates
                 command: |
+                  cp tpl/iam_profiles.tf.tpl iam_profiles.tf
                   secrethub inject -i tpl/terraformrc.tpl -o ~/.terraformrc
-                  secrethub inject -i tpl/subaccount.auto.tfvars.json.tpl -o roles/subaccount.auto.tfvars.json
+                  secrethub inject -i tpl/nonprod.auto.tfvars.json.tpl -o nonprod.auto.tfvars.json
           filters: *on-push-master
 
-      - approve-master-and-nonprod-changes:
+      - approve-nonprod-changes:
           type: approval
           requires:
-            - master-change-plan
             - nonprod-change-plan
-          filters: *on-push-master
-
-      - terraform/apply:
-          name: master-change-apply
-          context: ZTW
-          shell: secrethub run --env-file secrethub.master.env -- /bin/sh -eo pipefail
-          workspace: master
-          before-terraform:
-            - run:
-                name: generate environmental configuration and credentials from templates
-                command: |
-                  secrethub inject -i tpl/terraformrc.tpl -o ~/.terraformrc
-                  secrethub inject -i tpl/master.auto.tfvars.json.tpl -o master.auto.tfvars.json
-                  secrethub inject -i tpl/public.key.tpl -o .public.key
-                  secrethub inject -i tpl/private.key.tpl -o .private.key
-                  secrethub inject -i tpl/import_gpg_keys.sh.tpl -o import_gpg_keys.sh
-                  secrethub inject -i tpl/write_service_account_credentials.sh.tpl -o write_service_account_credentials.sh
-                  bash import_gpg_keys.sh
-          after-terraform:
-            - run:
-                name: test master account changes
-                command: secrethub run --env-file secrethub.master.env -- bats test
-            - run:
-                name: write service account credentials
-                command: bash write_service_account_credentials.sh
-          requires:
-            - approve-master-and-nonprod-changes
           filters: *on-push-master
 
       - terraform/apply:
@@ -93,22 +48,29 @@ workflows:
           context: ZTW
           shell: secrethub run --env-file secrethub.nonprod.env -- /bin/sh -eo pipefail
           workspace: nonprod
-          working-directory: roles
           before-terraform:
             - run:
                 name: generate environmental configuration and credentials from templates
                 command: |
+                  cp tpl/iam_profiles.tf.tpl iam_profiles.tf
                   secrethub inject -i tpl/terraformrc.tpl -o ~/.terraformrc
-                  secrethub inject -i tpl/subaccount.auto.tfvars.json.tpl -o roles/subaccount.auto.tfvars.json
+                  secrethub inject -i tpl/nonprod.auto.tfvars.json.tpl -o nonprod.auto.tfvars.json
+                  secrethub inject -i tpl/public.key.tpl -o .public.key
+                  secrethub inject -i tpl/private.key.tpl -o .private.key
+                  secrethub inject -i tpl/import_gpg_keys.sh.tpl -o import_gpg_keys.sh
+                  secrethub inject -i tpl/write_service_account_credentials.sh.tpl -o write_service_account_credentials.sh
+                  bash import_gpg_keys.sh
           after-terraform:
             - run:
                 name: test nonprod account changes
-                command: secrethub run --env-file secrethub.nonprod.env -- bats roles/test
+                command: secrethub run --env-file secrethub.nonprod.env -- bats test
+            - run:
+                name: write service account credentials
+                command: bash write_service_account_credentials.sh
           requires:
-            - approve-master-and-nonprod-changes
+            - approve-nonprod-changes
           filters: *on-push-master
 
-      # git tag = plan prod-role changes
       - terraform/plan:
           name: prod-change-plan
           context: ZTW
@@ -120,7 +82,7 @@ workflows:
                 name: generate environmental configuration and credentials from templates
                 command: |
                   secrethub inject -i tpl/terraformrc.tpl -o ~/.terraformrc
-                  secrethub inject -i tpl/subaccount.auto.tfvars.json.tpl -o roles/subaccount.auto.tfvars.json
+                  secrethub inject -i tpl/prod.auto.tfvars.json.tpl -o prod.auto.tfvars.json
           filters: *on-tag-master
 
       - approve-prod-changes:
@@ -140,11 +102,11 @@ workflows:
                 name: generate environmental configuration and credentials from templates
                 command: |
                   secrethub inject -i tpl/terraformrc.tpl -o ~/.terraformrc
-                  secrethub inject -i tpl/subaccount.auto.tfvars.json.tpl -o roles/subaccount.auto.tfvars.json
+                  secrethub inject -i tpl/prod.auto.tfvars.json.tpl -o prod.auto.tfvars.json
           after-terraform:
             - run:
-                name: test nonprod account changes
-                command: secrethub run --env-file secrethub.prod.env -- bats roles/test
+                name: test prod account changes
+                command: secrethub run --env-file secrethub.prod.env -- bats test/lab-iam-roles.bats
           requires:
             - approve-prod-changes
           filters: *on-tag-master
