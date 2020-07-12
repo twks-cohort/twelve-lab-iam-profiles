@@ -57,10 +57,14 @@ resource "aws_iam_user_group_membership" "DPSSimpleServiceAccount" {
   depends_on = [aws_iam_user.DPSSimpleServiceAccount, aws_iam_group.DPSTeamMemberGroup]
 }
 
+output "DPSSimpleServiceAccount_aws_access_key_id" {
+  value = aws_iam_access_key.DPSSimpleServiceAccount.id
+  sensitive   = true
+  description = "service-account aws-access-key-id"
+}
 
-
-
-# resource "aws_iam_group_policy_attachment" "attach_ReadOnlyAccess" {
-#   group      = aws_iam_group.DPSTeamMemberGroup.name
-#   policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
-# }
+output "DPSSimpleServiceAccount_encrypted_aws_secret_access_key" {
+  value = aws_iam_access_key.DPSSimpleServiceAccount.encrypted_secret
+  sensitive   = true
+  description = "gpg public key encrypted version of service-account aws-secret-access-key"
+}
