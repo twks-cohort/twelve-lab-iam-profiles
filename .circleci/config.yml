@@ -76,7 +76,6 @@ workflows:
           context: ZTW
           shell: secrethub run --env-file secrethub.prod.env -- /bin/sh -eo pipefail
           workspace: prod
-          working-directory: roles
           before-terraform:
             - run:
                 name: generate environmental configuration and credentials from templates
@@ -96,7 +95,6 @@ workflows:
           context: ZTW
           shell: secrethub run --env-file secrethub.prod.env -- /bin/sh -eo pipefail
           workspace: nonprod
-          working-directory: roles
           before-terraform:
             - run:
                 name: generate environmental configuration and credentials from templates
