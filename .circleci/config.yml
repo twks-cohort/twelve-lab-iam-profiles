@@ -2,7 +2,7 @@
 version: 2.1
 
 orbs:
-  terraform: feedyard/terraform@0.1.0
+  terraform: feedyard/terraform@0.2.0
 
 # git push: plan, release, test nonprod account changes
 on-push-master: &on-push-master
@@ -94,7 +94,7 @@ workflows:
           name: prod-change-apply
           context: ZTW
           shell: secrethub run --env-file secrethub.prod.env -- /bin/sh -eo pipefail
-          workspace: nonprod
+          workspace: prod
           before-terraform:
             - run:
                 name: generate environmental configuration and credentials from templates
