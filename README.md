@@ -45,5 +45,3 @@ DPSSimpleServiceAccount
 The `nonprod` env steps create the DPSSimpleServiceAccount identity in the nonprod account,  
 storing credentials in secrethub.io. This service account is then added to the  
 DPSTeamMemberGroup. Use this account to assume the above roles in infra-pipelines.  
-
----
