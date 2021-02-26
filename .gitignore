@@ -1,7 +1,8 @@
 .DS_Store
 local.env
 .terraform*
-master.auto.tfvars.json
+*.auto.tfvars.json
 .private.key
 .public.key
 import_gpg_keys.sh
+.terraform.lock.hcl
