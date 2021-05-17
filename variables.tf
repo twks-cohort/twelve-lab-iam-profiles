@@ -1,5 +1,15 @@
-variable "is_iam_users_account" {}
+# is the plan/apply running against the profiles account?
+variable "create_iam_profiles" {  
+  type     = bool
+  default = false
+}
+
 variable "aws_region" {}
 variable "prod_account_id" {}
 variable "nonprod_account_id" {}
-variable "twdpsio_gpg_public_key_base64" {}
+
+# twdps.io@gmail.com service account gpg public key for encrypting aws credentials
+variable "twdpsio_gpg_public_key_base64" {
+  type        = string
+  sensitive   = true
+}
