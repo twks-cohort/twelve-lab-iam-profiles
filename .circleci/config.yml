@@ -37,7 +37,7 @@ commands:
           name: set twdps.io gpg keys
           command: bash scripts/import_gpg_keys.sh
 
-  test-and-write-configuration:
+  test-configuration-and-write-credentials:
     description: |
       bats tests of the resulting infrastructure resources and write the service accounts
       credentials when successful during create_iam_profiles run.
@@ -87,8 +87,8 @@ workflows:
             - set-environment:
                 env: nonprod
           after-terraform:
-            - test-and-write-configuration:
-                end: nonprod
+            - test-configuration-and-write-credentials:
+                env: nonprod
           requires:
             - approve-nonprod-changes
           filters: *on-push-master
