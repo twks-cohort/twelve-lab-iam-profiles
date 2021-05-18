@@ -93,40 +93,34 @@ workflows:
             - approve-nonprod-changes
           filters: *on-push-master
 
-      # - terraform/plan:
-      #     name: prod-change-plan
-      #     context: ZTW
-      #     shell: secrethub run --env-file secrethub.prod.env -- /bin/sh -eo pipefail
-      #     workspace: prod
-      #     before-terraform:
-      #       - run:
-      #           name: generate environmental configuration and credentials from templates
-      #           command: |
-      #             secrethub inject -i tpl/terraformrc.tpl -o ~/.terraformrc
-      #             secrethub inject -i tpl/prod.auto.tfvars.json.tpl -o prod.auto.tfvars.json
-      #     filters: *on-tag-master
+      # release
+      - terraform/plan:
+          name: prod-change-plan
+          context: twdps-core-labs-team
+          shell: secrethub run --env-file secrethub.prod.env -- /bin/sh -eo pipefail
+          workspace: prod
+          before-terraform:
+            - set-environment:
+                env: prod
+          filters: *on-tag-master
 
-      # - approve-prod-changes:
-      #     type: approval
-      #     requires:
-      #       - prod-change-plan
-      #     filters: *on-tag-master
+      - approve-prod-changes:
+          type: approval
+          requires:
+            - prod-change-plan
+          filters: *on-tag-master
 
-      # - terraform/apply:
-      #     name: prod-change-apply
-      #     context: ZTW
-      #     shell: secrethub run --env-file secrethub.prod.env -- /bin/sh -eo pipefail
-      #     workspace: prod
-      #     before-terraform:
-      #       - run:
-      #           name: generate environmental configuration and credentials from templates
-      #           command: |
-      #             secrethub inject -i tpl/terraformrc.tpl -o ~/.terraformrc
-      #             secrethub inject -i tpl/prod.auto.tfvars.json.tpl -o prod.auto.tfvars.json
-      #     after-terraform:
-      #       - run:
-      #           name: test prod account changes
-      #           command: secrethub run --env-file secrethub.prod.env -- bats test/lab-iam-roles.bats
-      #     requires:
-      #       - approve-prod-changes
-      #     filters: *on-tag-master
+      - terraform/apply:
+          name: prod-change-apply
+          context: twdps-core-labs-team
+          shell: secrethub run --env-file secrethub.prod.env -- /bin/sh -eo pipefail
+          workspace: prod
+          before-terraform:
+            - set-environment:
+                env: prod
+          after-terraform:
+            - test-configuration-and-write-credentials:
+                env: nonprod
+          requires:
+            - approve-prod-changes
+          filters: *on-tag-master
