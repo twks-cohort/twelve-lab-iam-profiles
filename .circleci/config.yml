@@ -48,7 +48,7 @@ commands:
     steps:
       - run:
           name: test << parameters.env >> configuration
-          command: bash scripts/test_configuration.sh
+          command: bash scripts/test_configuration.sh << parameters.env >>
       - when:
           condition:
             equal: [ << parameters.env >>, "nonprod" ]
