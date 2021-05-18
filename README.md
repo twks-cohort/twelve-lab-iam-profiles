@@ -6,7 +6,6 @@
   <h5>lab-iam-ptofiles</h5>
 </div>
 <br />
-![bootstrap](https://img.shields.io/badge/phase-bootstrap-yellow.svg?style=flat)
 
 Given access to a complete suite of saas development tools*, the first step in a greenfield development is to bootstrap automation identity and permissions.  
 
