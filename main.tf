@@ -1,8 +1,7 @@
 # simplified authorization model
 #
 # a single member group is defined, inclusion enabling the user or
-# service account identity to assume either ReadOnly or Terraform  
-# permissions in both DPS aws accounts
+# service account identity to assume any role in both DPS aws accounts
 module "DPSTeamMemberGroup" {
   count = var.create_iam_profiles ? 1 : 0
   source  = "terraform-aws-modules/iam/aws//modules/iam-group-with-assumable-roles-policy"
@@ -11,8 +10,8 @@ module "DPSTeamMemberGroup" {
   name = "DPSTeamMemberGroup"
 
   assumable_roles = [
-    "arn:aws:iam::${var.nonprod_account_id}:role/DPS*",
-    "arn:aws:iam::${var.prod_account_id}:role/DPS*"
+    "arn:aws:iam::${var.nonprod_account_id}:role/*",
+    "arn:aws:iam::${var.prod_account_id}:role/*"
   ]
 }
 

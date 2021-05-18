@@ -1,26 +1,14 @@
-# Terraform User Role
-resource "aws_iam_policy" "DPSTerraformRolePolicy" {
-  name = "DPSTerraformRolePolicy"
-  path = "/"
-  policy = file("./policy/TerraformRolePolicy_1.0.json")
-}
+module "DPSTerraformRole" {
+  create_role = true
+  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
+  version = "~> 4.1"
 
-resource "aws_iam_role" "DPSTerraformRole" {
-  name = "DPSTerraformRole"
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": {
-    "Effect": "Allow",
-    "Principal": { "AWS": "arn:aws:iam::${var.nonprod_account_id}:root" },
-    "Action": "sts:AssumeRole"
-  }
-}
-EOF
-}
+  role_name = "DPSTerraformRole"
+  role_requires_mfa = false
+  custom_role_policy_arns = ["arn:aws:iam::aws:policy/AdministratorAccess"]
 
-resource "aws_iam_policy_attachment" "attachment_DPSTerraformRolePolicy_to_DPSTerraformRole" {
-  name = "DPSTerraformRolePolicy_attachment"
-  roles = [aws_iam_role.DPSTerraformRole.name]
-  policy_arn = aws_iam_policy.DPSTerraformRolePolicy.arn
+  trusted_role_arns = [
+    "arn:aws:iam::${var.nonprod_account_id}:root",
+    "arn:aws:iam::${var.prod_account_id}:root",
+  ]
 }

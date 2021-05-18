@@ -13,7 +13,7 @@
 
 @test "confirm policy attached to DPSTerraformRole" {
   run bash -c "aws iam list-attached-role-policies --role-name DPSTerraformRole"
-  [[ "${output}" =~ "DPSTerraformRolePolicy" ]]
+  [[ "${output}" =~ "PolicyName" ]]
 }
 
 @test "confirm policy attached to DPSReadOnlyRole" {

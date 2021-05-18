@@ -1,20 +1,14 @@
-# ReadOnly Role
-resource "aws_iam_role" "DPSReadOnlyRole" {
-  name = "DPSReadOnlyRole"
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": {
-    "Effect": "Allow",
-    "Principal": { "AWS": "arn:aws:iam::${var.nonprod_account_id}:root" },
-    "Action": "sts:AssumeRole"
-  }
-}
-EOF
-}
+module "DPSReadOnlyRole" {
+  create_role = true
+  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
+  version = "~> 4.1"
 
-resource "aws_iam_policy_attachment" "attachment_DPSReadonlyRolePolicy_to_DPSReadOnlyRole" {
-  name = "DPSReadonlyRolePolicy_attachment"
-  roles = [aws_iam_role.DPSReadOnlyRole.name]
-  policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+  role_name = "DPSReadOnlyRole"
+  role_requires_mfa = false
+  custom_role_policy_arns = ["arn:aws:iam::aws:policy/ReadOnlyAccess"]
+
+  trusted_role_arns = [
+    "arn:aws:iam::${var.nonprod_account_id}:root",
+    "arn:aws:iam::${var.prod_account_id}:root",
+  ]
 }
