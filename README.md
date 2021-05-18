@@ -1,47 +1,66 @@
+<div align="center">
+	<p>
+		<img alt="CircleCI Logo" src="https://github.com/ThoughtWorks-DPS/lab-documentation/blob/master/doc/img/dps-lab.png?sanitize=true" width="75" />
+	</p>
+  <h3>ThoughtWorks DPS Lab</h3>
+  <h5>lab-iam-ptofiles</h5>
+</div>
+<br />
 ![bootstrap](https://img.shields.io/badge/phase-bootstrap-yellow.svg?style=flat)
-# lab-iam-profiles
 
-This is the first pipeline applied to a set of greenfield accounts.  
+Given access to a complete suite of saas development tools*, the first step in a greenfield development is to bootstrap automation identity and permissions.  
 
-DPS-1  (prod)  
+<div align="center">
+	<p>
+		<img alt="CircleCI Logo" src="https://github.com/ThoughtWorks-DPS/lab-iam-profiles/blob/master/doc/aws_account_strategy.png" />
+	</p>
+</div>
+
+One of the accounts is a dedicated identity and audit state store. Bootstrap of the accounts means creating a minimal iam groups, roles, and service account structure. Once deployed, this pipeline can then incorporated the results of it's own configuration and enable the teams to create pipeline specific roles as needed throughout ongoing development.  
+
+**bootstrap step** manually create a bootstrap-group with iam:* permissions, and a bootstrap-user with programmatic credentials that is added to this group. Use these credentials to perform the inital creation of this iaim-profiles pipeline. Once the first iteration of the pipeline is stable, reconfigure the pipeline to subtitute the new service-account-nonprod credentials and assume the associated iam-profiles role. The bootstrap-user credentials are now deleted, though the bootstrap role and user can be retained. Should the need arise in the future to re-bootstrap the iam-profiless role, new bootstrap access keys can be generated.  
+
+The `state` account is the only account that will contain iam:group and iam:user resources. As the drawing below indicates, nonprod and prod service accounts are created to act as the indentity for all infrastructure pipelines. There are matching groups defined that enable the service accounts to assume any role matching the service-account-role naming pattern in the respective aws accounts. There is also a platform team members groups created the enable the owners of these accounts to assume any role in any accounts for development and forensic purposes. _note. production access is a necessary part of product ownership, and for compliance purposes monitoring and alerts are configured for the production account to track and notify regarding platform team direct access to the production account._
+
+<div align="center">
+	<p>
+		<img alt="CircleCI Logo" src="https://github.com/ThoughtWorks-DPS/lab-iam-profiles/blob/master/doc/configuration.png" />
+	</p>
+</div>
+
+This lab example simplifies the configuration to present just the resource configuration methods and uses only two accounts.    
+
 DPS-2  (nonprod)  
-
-Initial manual bootstrap configuration in each account of a single group and user:  
-
-Group: bootstrap-iam  (_iam privileges_)  
-User: bootstrap-_acct_ (_used only for lab-iam-profiles pipeline_)
+DPS-1  (prod)  
 
 ## configuration
 
-Non-production Account = DPS-1 (090950721693)  
+_group_
 
-Normally, a separate, user/role profile account exists to keep SSO and service accounts  
-completely separate from all other aws resources. Since DPS only has two accounts, it is  
-pulling double-duty. Not a practice to follow with a client.  
-
-_for individual team members_
-
-DPSTeamMemberGroup : standard group for both human and machine users
-
-After requesting SSO admin access, individual DPS AWS account users should create a  
-standard IAM user with access credentials, and add it to the DPSTeamMemberGroup group.  
-Do not create programmatic access for your SSO integrated identity.  
+DPSTeamMemberGroup : single group for both team members and a service account.  
 
 The DPSTeamMemberGroup is configured to be able to assume ReadOnly or Terraform roles  
 in both nonprod and prod. (substitute the appropriate account id) 
 
-arn:aws:iam::0123456789:role/DPSReadOnlyRole
-arn:aws:iam::0123456789:role/DPSTerraformRole
+_roles_
 
-_platform AWS service account_
+The simple TerraformRole demosntrates the basic resource configuration process. Adopt pipeline rbac limitations for an actual implementation.  
 
-Under this 'simplistic' service account configuration, a single service (or machine user)  
-accounts had been created to use for all infrastructure automation pipelines.  
+arn:aws:iam::0123456789:role/DPSReadOnlyRole  
+arn:aws:iam::0123456789:role/DPSTerraformRole  
 
-### initial service account
+_service account_
 
-DPSSimpleServiceAccount  
+A single service account (or machine user) has been created to use for all infrastructure automation pipeline examples.  
 
-The `nonprod` env steps create the DPSSimpleServiceAccount identity in the nonprod account,  
-storing credentials in secrethub.io. This service account is then added to the  
-DPSTeamMemberGroup. Use this account to assume the above roles in infra-pipelines.  
+DPSSimpleServiceAccount    
+
+#### Maintainers
+
+Internal developer guides and run-books for DPS lab environments are [here](https://github.com/ThoughtWorks-DPS/documentation-internal).  
+
+*saas tools used for this pipeline
+* secrethub (secrets management)
+* terraform cloud (backend state store)
+* circleci (pipeline orchestration)
+  * dockerhub (pipeline executors)

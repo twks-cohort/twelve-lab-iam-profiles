@@ -32,7 +32,7 @@ commands:
           command: secrethub inject -i tpl/terraformrc.tpl -o ~/.terraformrc
       - run:
           name: set << parameters.env >> environment variables
-          command: secrethub inject -i tpl/<< parameters.env >>.auto.tfvars.json.tpl -o << parameters.env >>.auto.tfvars.json
+          command: secrethub inject -i environments/<< parameters.env >>.auto.tfvars.json.tpl -o << parameters.env >>.auto.tfvars.json
       - run:
           name: set twdps.io gpg keys
           command: bash scripts/import_gpg_keys.sh
