@@ -48,7 +48,7 @@ commands:
     steps:
       - run:
           name: test << parameters.env >> configuration
-          command: bats test
+          command: bash scripts/test_configuration.sh
       - when:
           condition:
             equal: [ << parameters.env >>, "nonprod" ]

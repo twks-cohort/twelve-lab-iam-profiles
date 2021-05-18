@@ -6,5 +6,5 @@ end
 
 describe aws_iam_policy(policy_name: 'ReadOnlyAccess') do
   it { should exist }
-  its ('attached_roles') { should cmp 'DPSReadOnlyRole' }
+  its ('attached_roles') { should include 'DPSReadOnlyRole' }
 end
