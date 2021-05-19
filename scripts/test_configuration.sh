@@ -10,3 +10,7 @@ export ENVIRONMENT=$1
 export AWS_DEFAULT_REGION=$(cat ${ENVIRONMENT}.auto.tfvars.json | jq -r .aws_region)
 
 inspec exec test/iam-roles -t aws://
+
+if [[ ${ENVIRONMENT} eq "nonprod" ]]; then
+  inspec exec test/iam-profiles -t aws://
+fi
