@@ -64,14 +64,12 @@ workflows:
     jobs:
       - terraform/plan:
           name: nonprod-change-plan
-          environment:
-            ENV: nonprod
           context: twdps-core-labs-team
-          shell: secrethub run --env-file secrethub.$ENV.env -- /bin/sh -eo pipefail
-          workspace: $ENV
+          shell: secrethub run --env-file secrethub.nonprod.env -- /bin/sh -eo pipefail
+          workspace: nonprod
           before-terraform:
             - set-environment:
-                env: $ENV
+                env: nonprod
           filters: *on-push-master
 
       - approve-nonprod-changes:
@@ -82,17 +80,15 @@ workflows:
 
       - terraform/apply:
           name: nonprod-change-apply
-          environment:
-            ENV: nonprod
           context: twdps-core-labs-team
-          shell: secrethub run --env-file secrethub.$ENV.env -- /bin/sh -eo pipefail
-          workspace: $ENV
+          shell: secrethub run --env-file secrethub.nonprod.env -- /bin/sh -eo pipefail
+          workspace: nonprod
           before-terraform:
             - set-environment:
-                env: $ENV
+                env: nonprod
           after-terraform:
             - test-configuration-and-write-credentials:
-                env: $ENV
+                env: nonprod
           requires:
             - approve-nonprod-changes
           filters: *on-push-master
@@ -100,14 +96,12 @@ workflows:
       # release
       - terraform/plan:
           name: prod-change-plan
-          environment:
-            ENV: prod
           context: twdps-core-labs-team
-          shell: secrethub run --env-file secrethub.$ENV.env -- /bin/sh -eo pipefail
-          workspace: $ENV
+          shell: secrethub run --env-file secrethub.prod.env -- /bin/sh -eo pipefail
+          workspace: prod
           before-terraform:
             - set-environment:
-                env: $ENV
+                env: prod
           filters: *on-tag-master
 
       - approve-prod-changes:
@@ -118,17 +112,15 @@ workflows:
 
       - terraform/apply:
           name: prod-change-apply
-          environment:
-            ENV: prod
           context: twdps-core-labs-team
-          shell: secrethub run --env-file secrethub.$ENV.env -- /bin/sh -eo pipefail
-          workspace: $ENV
+          shell: secrethub run --env-file secrethub.prod.env -- /bin/sh -eo pipefail
+          workspace: prod
           before-terraform:
             - set-environment:
-                env: $ENV
+                env: prod
           after-terraform:
             - test-configuration-and-write-credentials:
-                env: $ENV
+                env: prod
           requires:
             - approve-prod-changes
           filters: *on-tag-master
