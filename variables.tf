@@ -1,7 +1,7 @@
 # is the plan/apply running against the profiles account?
-variable "create_iam_profiles" {  
+variable "create_iam_profiles" {
   type     = bool
-  default = false
+  default  = false
 }
 
 variable "aws_region" {}
