@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+whoami
+
 secrethub read --out-file .public.key twdps/di/svc/gpg/public.key
 secrethub read --out-file .private.key twdps/di/svc/gpg/private.key
 
