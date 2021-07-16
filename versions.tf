@@ -23,6 +23,6 @@ provider "aws" {
   # secrethub.*.env to contain the DPSSimpleServiceAccount identity
   assume_role {
     role_arn     = "arn:aws:iam::${var.account_id}:role/${var.assume_role}"
-    session_name = "lab-platform-vpc-${var.cluster_name}"
+    session_name = "lab-iam-profiles"
   }
 }
