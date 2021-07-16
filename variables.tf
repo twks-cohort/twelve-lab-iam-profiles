@@ -5,6 +5,7 @@ variable "create_iam_profiles" {
 }
 
 variable "aws_region" {}
+variable "account_id" {}
 variable "prod_account_id" {}
 variable "nonprod_account_id" {}
 
