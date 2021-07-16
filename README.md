@@ -41,7 +41,7 @@ _group_
 DPSTeamMemberGroup : single group for both team members and a service account.  
 
 The DPSTeamMemberGroup is configured to be able to assume ReadOnly or Terraform roles  
-in both nonprod and prod. (substitute the appropriate account id)
+in both nonprod and prod. (substitute the appropriate account id)  
 
 _roles_
 
