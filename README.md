@@ -4,8 +4,7 @@
     <br />
 		<img alt="DPS Title" src="https://raw.githubusercontent.com/ThoughtWorks-DPS/static/master/dps_lab_title.png?sanitize=true" width=350/>
 	</p>
-  <h3>ThoughtWorks DPS Lab</h3>
-  <h1>lab-iam-profiles</h1>
+  <h3>lab-iam-profiles<3h1>
 </div>
 <br />
 
