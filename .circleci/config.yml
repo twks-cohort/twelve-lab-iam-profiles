@@ -21,7 +21,7 @@ parameters:
 # git push: deploy nonprod (dps-2)
 on-push-main: &on-push-main
   branches:
-    only: /master/
+    only: /main/
   tags:
     ignore: /.*/
 
