@@ -5,7 +5,7 @@
 module "DPSTeamMemberGroup" {
   count = var.create_iam_profiles ? 1 : 0
   source  = "terraform-aws-modules/iam/aws//modules/iam-group-with-assumable-roles-policy"
-  version = "~> 4.1"
+  version = "~> 4.3"
 
   name = "DPSTeamMemberGroup"
 
@@ -21,7 +21,7 @@ module "DPSTeamMemberGroup" {
 module "DPSSimpleServiceAccount" {
   create_user = var.create_iam_profiles
   source  = "terraform-aws-modules/iam/aws//modules/iam-user"
-  version = "~> 4.1"
+  version = "~> 4.3"
 
   name                          = "DPSSimpleServiceAccount"
   create_iam_access_key         = true

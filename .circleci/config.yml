@@ -15,22 +15,18 @@ parameters:
     description: circleci context for all jobs
     type: string
     default: twdps-core-labs-team
-  shell-options:
-    description: shell options for all jobs
-    type: string
-    default: secrethub run -- /bin/sh -eo pipefail
 
 # ==== triggers
 
 # git push: deploy nonprod (dps-2)
-on-push-master: &on-push-master
+on-push-main: &on-push-main
   branches:
     only: /master/
   tags:
     ignore: /.*/
 
 # git tag: deploy prod (dps-1)
-on-tag-master: &on-tag-master
+on-tag-main: &on-tag-main
   branches:
     ignore: /.*/
   tags:
@@ -55,15 +51,24 @@ commands:
           name: set twdps.io gpg keys
           command: bash scripts/import_gpg_keys.sh
 
+jobs:
+
   test-configuration-and-write-credentials:
     description: |
       bats tests of the resulting infrastructure resources and write the service accounts
       credentials when successful during create_iam_profiles run.
+    docker:
+      - image: twdps/circleci-infra-aws:alpine-1.0.0
+    shell: secrethub run -- /bin/sh -eo pipefail
     parameters:
       env:
         type: string
         default: ''
     steps:
+      - checkout
+      - setup_remote_docker
+      - set-environment:
+          env: << parameters.env >>
       - run:
           name: test << parameters.env >> configuration
           command: bash scripts/test_configuration.sh << parameters.env >>
@@ -82,63 +87,77 @@ workflows:
     jobs:
       - terraform/plan:
           name: nonprod-change-plan
-          context: twdps-core-labs-team
+          context: << pipeline.parameters.context >>
           shell: secrethub run --env-file secrethub.nonprod.env -- /bin/sh -eo pipefail
           workspace: nonprod
+          terraform-version: << pipeline.parameters.terraform-version >>
           before-terraform:
             - set-environment:
                 env: nonprod
-          filters: *on-push-master
+          filters: *on-push-main
 
       - approve-nonprod-changes:
           type: approval
           requires:
             - nonprod-change-plan
-          filters: *on-push-master
+          filters: *on-push-main
 
       - terraform/apply:
           name: nonprod-change-apply
-          context: twdps-core-labs-team
+          context: << pipeline.parameters.context >>
           shell: secrethub run --env-file secrethub.nonprod.env -- /bin/sh -eo pipefail
           workspace: nonprod
+          terraform-version: << pipeline.parameters.terraform-version >>
           before-terraform:
             - set-environment:
                 env: nonprod
-          after-terraform:
-            - test-configuration-and-write-credentials:
-                env: nonprod
           requires:
             - approve-nonprod-changes
-          filters: *on-push-master
+          filters: *on-push-main
+
+      - test-configuration-and-write-credentials:
+          name: test-nonprod-iam-configuration
+          context: << pipeline.parameters.context >>
+          env: nonprod
+          requires:
+            - nonprod-change-apply
+          filters: *on-push-main
 
       # release
       - terraform/plan:
           name: prod-change-plan
-          context: twdps-core-labs-team
+          context: << pipeline.parameters.context >>
           shell: secrethub run --env-file secrethub.prod.env -- /bin/sh -eo pipefail
           workspace: prod
+          terraform-version: << pipeline.parameters.terraform-version >>
           before-terraform:
             - set-environment:
                 env: prod
-          filters: *on-tag-master
+          filters: *on-push-main
 
       - approve-prod-changes:
           type: approval
           requires:
             - prod-change-plan
-          filters: *on-tag-master
+          filters: *on-tag-main
 
       - terraform/apply:
           name: prod-change-apply
-          context: twdps-core-labs-team
+          context: << pipeline.parameters.context >>
           shell: secrethub run --env-file secrethub.prod.env -- /bin/sh -eo pipefail
           workspace: prod
+          terraform-version: << pipeline.parameters.terraform-version >>
           before-terraform:
             - set-environment:
                 env: prod
-          after-terraform:
-            - test-configuration-and-write-credentials:
-                env: prod
           requires:
             - approve-prod-changes
-          filters: *on-tag-master
+          filters: *on-push-main
+    
+      - test-configuration-and-write-credentials:
+          name: test-prod-iam-configuration
+          context: << pipeline.parameters.context >>
+          env: prod
+          requires:
+            - prod-change-apply
+          filters: *on-push-main

@@ -1,7 +1,7 @@
 module "DPSReadOnlyRole" {
   create_role = true
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "~> 4.1"
+  version = "~> 4.3"
 
   role_name = "DPSReadOnlyRole"
   role_requires_mfa = false
