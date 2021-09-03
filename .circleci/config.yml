@@ -133,7 +133,7 @@ workflows:
           before-terraform:
             - set-environment:
                 env: prod
-          filters: *on-push-main
+          filters: *on-tag-main
 
       - approve-prod-changes:
           type: approval
@@ -152,7 +152,7 @@ workflows:
                 env: prod
           requires:
             - approve-prod-changes
-          filters: *on-push-main
+          filters: *on-tag-main
     
       - test-configuration-and-write-credentials:
           name: test-prod-iam-configuration
@@ -160,4 +160,4 @@ workflows:
           env: prod
           requires:
             - prod-change-apply
-          filters: *on-push-main
+          filters: *on-tag-main
