@@ -2,7 +2,25 @@
 version: 2.1
 
 orbs:
-  terraform: feedyard/terraform@0.6.0
+  terraform: twdps/terraform@0.1.0
+
+# ==== global pipeline parameters
+
+parameters:
+  terraform-version:
+    description: terraform version for all jobs
+    type: string
+    default: "1.0.6"
+  context:
+    description: circleci context for all jobs
+    type: string
+    default: twdps-core-labs-team
+  shell-options:
+    description: shell options for all jobs
+    type: string
+    default: secrethub run -- /bin/sh -eo pipefail
+
+# ==== triggers
 
 # git push: deploy nonprod (dps-2)
 on-push-master: &on-push-master
