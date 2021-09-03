@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-whoami
+echo ${GPG_KEY_PASSPHRASE:0:5}
 
 secrethub read --out-file .public.key twdps/di/svc/gpg/public.key
 secrethub read --out-file .private.key twdps/di/svc/gpg/private.key
