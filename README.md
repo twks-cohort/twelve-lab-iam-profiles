@@ -1,9 +1,10 @@
 <div align="center">
 	<p>
-		<img alt="CircleCI Logo" src="https://github.com/ThoughtWorks-DPS/lab-documentation/blob/master/doc/img/dps-lab.png?sanitize=true" width="75" />
+		<img alt="Thoughtworks Logo" src="https://raw.githubusercontent.com/ThoughtWorks-DPS/static/master/thoughtworks_flamingo_wave.png?sanitize=true" width=200 />
+    <br />
+		<img alt="DPS Title" src="https://raw.githubusercontent.com/ThoughtWorks-DPS/static/master/dps_lab_title.png?sanitize=true" width=350/>
 	</p>
-  <h3>ThoughtWorks DPS Lab</h3>
-  <h5>lab-iam-profiles</h5>
+  <h3>lab-iam-profiles</h3>
 </div>
 <br />
 
@@ -11,7 +12,7 @@ Given access to a complete suite of saas development tools*, the first step in a
 
 <div align="center">
 	<p>
-		<img alt="CircleCI Logo" src="https://github.com/ThoughtWorks-DPS/lab-iam-profiles/blob/master/doc/aws_account_strategy.png" />
+		<img alt="CircleCI Logo" src="https://github.com/ThoughtWorks-DPS/lab-iam-profiles/blob/main/doc/aws_account_strategy.png" />
 	</p>
 </div>
 
@@ -25,7 +26,7 @@ The `state` account is the only account that will contain iam:group and iam:user
 
 <div align="center">
 	<p>
-		<img alt="CircleCI Logo" src="https://github.com/ThoughtWorks-DPS/lab-iam-profiles/blob/master/doc/configuration.png" />
+		<img alt="CircleCI Logo" src="https://github.com/ThoughtWorks-DPS/lab-iam-profiles/blob/main/doc/configuration.png" />
 	</p>
 </div>
 

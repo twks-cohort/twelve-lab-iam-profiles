@@ -58,7 +58,7 @@ jobs:
       bats tests of the resulting infrastructure resources and write the service accounts
       credentials when successful during create_iam_profiles run.
     docker:
-      - image: twdps/circleci-infra-aws:alpine-1.0.1
+      - image: twdps/circleci-infra-aws:alpine-1.0.2
     shell: secrethub run --env-file secrethub.<< parameters.env >>.env -- /bin/sh -eo pipefail
     parameters:
       env:
@@ -90,7 +90,7 @@ workflows:
           context: << pipeline.parameters.context >>
           shell: secrethub run --env-file secrethub.nonprod.env -- /bin/sh -eo pipefail
           workspace: nonprod
-          executor-image: twdps/circleci-infra-aws:alpine-1.0.1
+          executor-image: twdps/circleci-infra-aws:alpine-1.0.2
           terraform-version: << pipeline.parameters.terraform-version >>
           before-terraform:
             - set-environment:
@@ -108,7 +108,7 @@ workflows:
           context: << pipeline.parameters.context >>
           shell: secrethub run --env-file secrethub.nonprod.env -- /bin/sh -eo pipefail
           workspace: nonprod
-          executor-image: twdps/circleci-infra-aws:alpine-1.0.1
+          executor-image: twdps/circleci-infra-aws:alpine-1.0.2
           terraform-version: << pipeline.parameters.terraform-version >>
           before-terraform:
             - set-environment:
@@ -131,7 +131,7 @@ workflows:
           context: << pipeline.parameters.context >>
           shell: secrethub run --env-file secrethub.prod.env -- /bin/sh -eo pipefail
           workspace: prod
-          executor-image: twdps/circleci-infra-aws:alpine-1.0.1
+          executor-image: twdps/circleci-infra-aws:alpine-1.0.2
           terraform-version: << pipeline.parameters.terraform-version >>
           before-terraform:
             - set-environment:
@@ -149,7 +149,7 @@ workflows:
           context: << pipeline.parameters.context >>
           shell: secrethub run --env-file secrethub.prod.env -- /bin/sh -eo pipefail
           workspace: prod
-          executor-image: twdps/circleci-infra-aws:alpine-1.0.1
+          executor-image: twdps/circleci-infra-aws:alpine-1.0.2
           terraform-version: << pipeline.parameters.terraform-version >>
           before-terraform:
             - set-environment:
