@@ -81,9 +81,9 @@ jobs:
             - run:
                 name: write service account credentials when create_iam_profiles = true
                 command: |
+                  terraform init
                   echo << parameters.env >>
                   terraform workspace select << parameters.env >>
-                  terraform init
                   bash scripts/write_service_account_credentials.sh 
 
 workflows:
