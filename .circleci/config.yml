@@ -2,7 +2,7 @@
 version: 2.1
 
 orbs:
-  terraform: twdps/terraform@0.3.0
+  terraform: twdps/terraform@dev:latest
 
 # ==== global pipeline parameters
 
@@ -76,6 +76,8 @@ jobs:
           condition:
             equal: [ << parameters.env >>, "nonprod" ]
           steps:
+            - terraform/setup-packages:
+                terraform-version: << pipeline.parameters.terraform-version >>
             - run:
                 name: write service account credentials when create_iam_profiles = true
                 command: bash scripts/write_service_account_credentials.sh
