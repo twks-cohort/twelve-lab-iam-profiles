@@ -80,7 +80,10 @@ jobs:
                 terraform-version: << pipeline.parameters.terraform-version >>
             - run:
                 name: write service account credentials when create_iam_profiles = true
-                command: bash scripts/write_service_account_credentials.sh
+                command: |
+                  terraform init
+                  terraform workspace select << parameters.env >>
+                  bash scripts/write_service_account_credentials.sh 
 
 workflows:
   version: 2
