@@ -10,7 +10,7 @@ parameters:
   terraform-version:
     description: terraform version for all jobs
     type: string
-    default: "1.0.6"
+    default: "1.0.11"
   context:
     description: circleci context for all jobs
     type: string
@@ -58,7 +58,7 @@ jobs:
       bats tests of the resulting infrastructure resources and write the service accounts
       credentials when successful during create_iam_profiles run.
     docker:
-      - image: twdps/circleci-infra-aws:alpine-1.0.2
+      - image: twdps/circleci-infra-aws:alpine-1.2.0
     environment:
       TF_WORKSPACE: << parameters.env >>
     shell: secrethub run --env-file secrethub.<< parameters.env >>.env -- /bin/sh -eo pipefail
