@@ -3,6 +3,8 @@ version: 2.1
 
 orbs:
   terraform: twdps/terraform@0.4.0
+  # used for github-release-notes feature
+  executor-tools: twdps/executor-tools@0.2.0
 
 # ==== global pipeline parameters
 
@@ -10,7 +12,7 @@ parameters:
   terraform-version:
     description: terraform version for all jobs
     type: string
-    default: "1.0.11"
+    default: "1.1.3"
   context:
     description: circleci context for all jobs
     type: string
@@ -18,7 +20,7 @@ parameters:
   executor-image:
     description: image to use for terraform runs
     type: string
-    default: twdps/circleci-infra-aws:alpine-1.2.0
+    default: twdps/circleci-infra-aws:alpine-1.3.0
 
 # ==== triggers
 
@@ -68,8 +70,12 @@ jobs:
     shell: secrethub run --env-file secrethub.<< parameters.env >>.env -- /bin/sh -eo pipefail
     parameters:
       env:
+        description: nonprod or production account configuration
         type: string
-        default: ''
+      test-only:
+        description: run validation only without writing credentials
+        type: boolean
+        default: false
     steps:
       - checkout
       - setup_remote_docker
@@ -80,7 +86,9 @@ jobs:
           command: bash scripts/test_configuration.sh << parameters.env >>
       - when:
           condition:
-            equal: [ << parameters.env >>, "nonprod" ]
+            and:
+              - equal: [ << parameters.env >>, "nonprod" ]
+              - equal: [ << parameters.test-only >>, false ]
           steps:
             - terraform/setup-packages:
                 terraform-version: << pipeline.parameters.terraform-version >>
@@ -135,42 +143,71 @@ workflows:
           filters: *on-push-main
 
       # release
-      - terraform/plan:
-          name: prod-change-plan
-          context: << pipeline.parameters.context >>
-          shell: secrethub run --env-file secrethub.prod.env -- /bin/sh -eo pipefail
-          workspace: prod
-          executor-image: << pipeline.parameters.executor-image >>
-          terraform-version: << pipeline.parameters.terraform-version >>
-          before-terraform:
-            - set-environment:
-                env: prod
-          filters: *on-tag-main
+      # - terraform/plan:
+      #     name: prod-change-plan
+      #     context: << pipeline.parameters.context >>
+      #     shell: secrethub run --env-file secrethub.prod.env -- /bin/sh -eo pipefail
+      #     workspace: prod
+      #     executor-image: << pipeline.parameters.executor-image >>
+      #     terraform-version: << pipeline.parameters.terraform-version >>
+      #     before-terraform:
+      #       - set-environment:
+      #           env: prod
+      #     filters: *on-tag-main
 
-      - approve-prod-changes:
-          type: approval
-          requires:
-            - prod-change-plan
-          filters: *on-tag-main
+      # - approve-prod-changes:
+      #     type: approval
+      #     requires:
+      #       - prod-change-plan
+      #     filters: *on-tag-main
 
-      - terraform/apply:
-          name: prod-change-apply
-          context: << pipeline.parameters.context >>
-          shell: secrethub run --env-file secrethub.prod.env -- /bin/sh -eo pipefail
-          workspace: prod
-          executor-image: << pipeline.parameters.executor-image >>
-          terraform-version: << pipeline.parameters.terraform-version >>
-          before-terraform:
-            - set-environment:
-                env: prod
-          requires:
-            - approve-prod-changes
-          filters: *on-tag-main
+      # - terraform/apply:
+      #     name: prod-change-apply
+      #     context: << pipeline.parameters.context >>
+      #     shell: secrethub run --env-file secrethub.prod.env -- /bin/sh -eo pipefail
+      #     workspace: prod
+      #     executor-image: << pipeline.parameters.executor-image >>
+      #     terraform-version: << pipeline.parameters.terraform-version >>
+      #     before-terraform:
+      #       - set-environment:
+      #           env: prod
+      #     requires:
+      #       - approve-prod-changes
+      #     filters: *on-tag-main
     
-      - test-configuration-and-write-credentials:
-          name: test-prod-iam-configuration
+      # - test-configuration-and-write-credentials:
+      #     name: test-prod-iam-configuration
+      #     context: << pipeline.parameters.context >>
+      #     env: prod
+      #     requires:
+      #       - prod-change-apply
+      #     filters: *on-tag-main
+
+  generate-release-notes:
+    jobs:
+      - executor-tools/release:
+          name: release-lab-iam-profiles
           context: << pipeline.parameters.context >>
-          env: prod
-          requires:
-            - prod-change-apply
+          shell: secrethub run --env-file secrethub.nonprod.env -- /bin/sh -eo pipefail
           filters: *on-tag-main
+
+# nightly iam-profiles configuration validation
+  nightly-vpc-configuration-validation:
+    triggers:
+      - schedule:
+          cron: "0 1 * * *"
+          filters:
+            branches:
+              only:
+                - main
+    jobs:
+      - test-configuration-and-write-credentials:
+          name: nightly-nonprod-iam-profiles-validation
+          context: << pipeline.parameters.context >>
+          env: sandbox
+          test-only: true
+      # - test-configuration-and-write-credentials:
+      #     name: nightly-prod-iam-profiles-validation
+      #     context: << pipeline.parameters.context >>
+      #     env: 
+      #     test-only: true
