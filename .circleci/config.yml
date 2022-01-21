@@ -178,7 +178,7 @@ workflows:
       - test-configuration-and-write-credentials:
           name: test-prod-iam-configuration
           context: << pipeline.parameters.context >>
-          eaccountnv: prod
+          account: prod
           requires:
             - prod-change-apply
           filters: *on-tag-main
