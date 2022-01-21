@@ -21,7 +21,7 @@ module "DPSTeamMemberGroup" {
 module "DPSSimpleServiceAccount" {
   create_user = var.create_iam_profiles
   source  = "terraform-aws-modules/iam/aws//modules/iam-user"
-  version = "~> 4.10.1"
+  version = "~> 4.7"
 
   name                          = "DPSSimpleServiceAccount"
   create_iam_access_key         = true

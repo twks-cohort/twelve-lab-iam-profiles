@@ -4,7 +4,7 @@
 cat <<EOF > role-${1}.tf
 module "${1}Policy" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "~> 3.0"
+  version = "~> 4.7"
 
   name    = "${1}Policy"
   policy  = file("./policy/${1}Policy.json")

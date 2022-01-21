@@ -1,7 +1,7 @@
 module "DPSTerraformRole" {
   create_role = true
   source      = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version     = "~> 4.10.1"
+  version     = "~> 4.7"
 
   role_name                         = "DPSTerraformRole"
   role_requires_mfa                 = false
