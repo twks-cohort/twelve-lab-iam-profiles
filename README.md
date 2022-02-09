@@ -57,6 +57,10 @@ A single service account (or machine user) has been created to use for all infra
 
 DPSSimpleServiceAccount  
 
+## DataDog
+
+The aws account core integration to datadog is a external-id based role. This is a single role per aws account and in the lab is managed by this repo/pipeline since it bears the same attributes iam-profile roles in general.    
+
 #### Maintainers
 
 Internal developer guides and run-books for DPS lab environments are [here](https://github.com/ThoughtWorks-DPS/documentation-internal).  

@@ -4,6 +4,9 @@ terraform {
     aws = {
       source  = "hashicorp/aws"
     }
+    datadog = {
+      source = "DataDog/datadog"
+    }
   }
 
   backend "remote" {
@@ -25,4 +28,9 @@ provider "aws" {
     role_arn     = "arn:aws:iam::${var.account_id}:role/${var.assume_role}"
     session_name = "lab-iam-profiles"
   }
+}
+
+provider "datadog" {
+  api_key = var.datadog_api_key
+  app_key = var.datadog_app_key
 }
