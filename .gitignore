@@ -5,3 +5,4 @@ local.env
 .private.key
 .public.key
 .terraform.lock.hcl
+Pipfile.lock
