@@ -174,7 +174,7 @@ workflows:
           requires:
             - approve-prod-changes
           filters: *on-tag-main
-    
+
       - test-configuration-and-write-credentials:
           name: test-prod-iam-configuration
           context: << pipeline.parameters.context >>
@@ -191,8 +191,8 @@ workflows:
           shell: secrethub run --env-file secrethub.nonprod.env -- /bin/sh -eo pipefail
           filters: *on-tag-main
 
-# nightly iam-profiles configuration validation
-  nightly-vpc-configuration-validation:
+
+  nightly-iam-profiles-configuration-validation:
     triggers:
       - schedule:
           cron: "0 1 * * *"

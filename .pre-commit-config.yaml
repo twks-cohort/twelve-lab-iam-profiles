@@ -21,10 +21,3 @@ repos:
     hooks:
       - id: talisman-commit
         entry: cmd --githook pre-commit
-  - repo: local
-    hooks:
-        - id: git-secrets
-          name: git-secrets
-          entry: git-secrets
-          language: system
-          args: ["--scan"]
