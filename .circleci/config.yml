@@ -105,7 +105,7 @@ workflows:
       - terraform/plan:
           name: nonprod-change-plan
           context: << pipeline.parameters.context >>
-          shell: op run --env-file op.nonprod.env -- /bin/sh -eo pipefail
+          shell: op run --env-file op.nonprod.env -- /bin/bash -eo pipefail
           workspace: nonprod
           executor-image: << pipeline.parameters.executor-image >>
           terraform-version: << pipeline.parameters.terraform-version >>
@@ -123,7 +123,7 @@ workflows:
       - terraform/apply:
           name: nonprod-change-apply
           context: << pipeline.parameters.context >>
-          shell: op run --env-file op.nonprod.env -- /bin/sh -eo pipefail
+          shell: op run --env-file op.nonprod.env -- /bin/bash -eo pipefail
           workspace: nonprod
           executor-image: << pipeline.parameters.executor-image >>
           terraform-version: << pipeline.parameters.terraform-version >>
@@ -146,7 +146,7 @@ workflows:
       - terraform/plan:
           name: prod-change-plan
           context: << pipeline.parameters.context >>
-          shell: op run --env-file op.prod.env -- /bin/sh -eo pipefail
+          shell: op run --env-file op.prod.env -- /bin/bash -eo pipefail
           workspace: prod
           executor-image: << pipeline.parameters.executor-image >>
           terraform-version: << pipeline.parameters.terraform-version >>
@@ -164,7 +164,7 @@ workflows:
       - terraform/apply:
           name: prod-change-apply
           context: << pipeline.parameters.context >>
-          shell: op run --env-file op.prod.env -- /bin/sh -eo pipefail
+          shell: op run --env-file op.prod.env -- /bin/bash -eo pipefail
           workspace: prod
           executor-image: << pipeline.parameters.executor-image >>
           terraform-version: << pipeline.parameters.terraform-version >>
