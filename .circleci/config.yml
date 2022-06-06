@@ -79,6 +79,11 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
+      - run:
+          name: inject environment variables
+          command: |
+            op inject -i op.nonprod.env -o $BASH_ENV
+            source $BASH_ENV
       - set-environment:
           account: << parameters.account >>
       - run:
@@ -105,7 +110,6 @@ workflows:
       - terraform/plan:
           name: nonprod-change-plan
           context: << pipeline.parameters.context >>
-          shell: op run --env-file op.nonprod.env -- /bin/bash -eo pipefail
           workspace: nonprod
           executor-image: << pipeline.parameters.executor-image >>
           terraform-version: << pipeline.parameters.terraform-version >>
@@ -128,7 +132,6 @@ workflows:
       - terraform/apply:
           name: nonprod-change-apply
           context: << pipeline.parameters.context >>
-          shell: op run --env-file op.nonprod.env -- /bin/bash -eo pipefail
           workspace: nonprod
           executor-image: << pipeline.parameters.executor-image >>
           terraform-version: << pipeline.parameters.terraform-version >>
@@ -156,7 +159,6 @@ workflows:
       - terraform/plan:
           name: prod-change-plan
           context: << pipeline.parameters.context >>
-          shell: op run --env-file op.prod.env -- /bin/bash -eo pipefail
           workspace: prod
           executor-image: << pipeline.parameters.executor-image >>
           terraform-version: << pipeline.parameters.terraform-version >>
@@ -179,7 +181,6 @@ workflows:
       - terraform/apply:
           name: prod-change-apply
           context: << pipeline.parameters.context >>
-          shell: op run --env-file op.prod.env -- /bin/bash -eo pipefail
           workspace: prod
           executor-image: << pipeline.parameters.executor-image >>
           terraform-version: << pipeline.parameters.terraform-version >>
