@@ -110,6 +110,11 @@ workflows:
           executor-image: << pipeline.parameters.executor-image >>
           terraform-version: << pipeline.parameters.terraform-version >>
           before-terraform:
+            - run:
+                name: inject environment variables
+                command: |
+                  op inject -i op.nonprod.env -o $BASH_ENV
+                  source $BASH_ENV
             - set-environment:
                 account: nonprod
           filters: *on-push-main
@@ -128,6 +133,11 @@ workflows:
           executor-image: << pipeline.parameters.executor-image >>
           terraform-version: << pipeline.parameters.terraform-version >>
           before-terraform:
+            - run:
+                name: inject environment variables
+                command: |
+                  op inject -i op.nonprod.env -o $BASH_ENV
+                  source $BASH_ENV
             - set-environment:
                 account: nonprod
           requires:
@@ -151,6 +161,11 @@ workflows:
           executor-image: << pipeline.parameters.executor-image >>
           terraform-version: << pipeline.parameters.terraform-version >>
           before-terraform:
+            - run:
+                name: inject environment variables
+                command: |
+                  op inject -i op.nonprod.env -o $BASH_ENV
+                  source $BASH_ENV
             - set-environment:
                 account: prod
           filters: *on-tag-main
@@ -169,6 +184,11 @@ workflows:
           executor-image: << pipeline.parameters.executor-image >>
           terraform-version: << pipeline.parameters.terraform-version >>
           before-terraform:
+            - run:
+                name: inject environment variables
+                command: |
+                  op inject -i op.nonprod.env -o $BASH_ENV
+                  source $BASH_ENV
             - set-environment:
                 account: prod
           requires:
