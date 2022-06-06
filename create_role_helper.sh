@@ -1,40 +1,36 @@
 #!/usr/bin/env bash
 
-# $1 is the role name
-cat <<EOF > role-${1}.tf
-module "${1}Policy" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "~> 4.7"
-
-  name    = "${1}Policy"
-  policy  = file("./policy/${1}Policy.json")
-}
-
+cat <<EOF > ${1}.tf
 module "${1}" {
+  source      = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
+  version     = "~> 5.1"
   create_role = true
-  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "~> 4.1"
 
-  role_name = "${1}"
-  role_requires_mfa = false
-  custom_role_policy_arns = ["arn:aws:iam::aws:policy/${1}Policy"]
+  role_name                         = "${1}"
+  role_requires_mfa                 = false
+  custom_role_policy_arns           = [aws_iam_policy.${1}Policy.arn]
+  number_of_custom_role_policy_arns = 1
 
-  trusted_role_arns = [
-    "arn:aws:iam::\${var.nonprod_account_id}:root",
-    "arn:aws:iam::\${var.prod_account_id}:root",
-  ]
+  trusted_role_arns = ["arn:aws:iam::${var.nonprod_account_id}:root"]
 }
-EOF
 
-cat <<EOF > policy/${1}.json
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Deny",
-      "Resource": "*"
-    }
-  ]
+
+resource "aws_iam_policy" "${1}Policy" {
+  name = "${1}Policy"
+  path = "/"
+
+  policy = jsonencode({
+    "Version": "2012-10-17"
+    "Statement": [
+      {
+        "Action": [
+
+        ]
+        "Effect": "Allow"
+        "Resource": "*"
+      },
+    ]
+  })
 }
 EOF
 
@@ -47,8 +43,9 @@ end
 
 describe aws_iam_policy(policy_name: '${1}Policy') do
   it { should exist }
-  its ('attached_roles') { should cmp '${1}' }
+  its ('attached_roles') { should include '${1}' }
 end
+
 EOF
 
-echo 'edit the ${1}.json policy document to define permissions for the new role'
+echo 'edit the ${1}.tf policy resource to define permissions for the new role'

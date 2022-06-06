@@ -5,7 +5,7 @@ module "datadog_integration" {
 
   name      = "DataDogAccountRole"
   host_tags = [
-    "account-id=${var.account_id}",
+    "account-id=${var.aws_account_id}",
   ]
   integrations               = ["all"]
 }

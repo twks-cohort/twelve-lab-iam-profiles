@@ -2,9 +2,9 @@
 version: 2.1
 
 orbs:
-  terraform: twdps/terraform@0.4.0
+  terraform: twdps/terraform@0.5.0
   # used for github-release-notes feature
-  executor-tools: twdps/executor-tools@0.2.0
+  executor-tools: twdps/executor-tools@0.7.0
 
 # ==== global pipeline parameters
 
@@ -12,7 +12,7 @@ parameters:
   terraform-version:
     description: terraform version for all jobs
     type: string
-    default: "1.1.3"
+    default: "1.2.2"
   context:
     description: circleci context for all jobs
     type: string
@@ -20,7 +20,7 @@ parameters:
   executor-image:
     description: image to use for terraform runs
     type: string
-    default: twdps/circleci-infra-aws:alpine-1.3.0
+    default: twdps/circleci-infra-aws:alpine-1.7.0
 
 # ==== triggers
 
@@ -49,10 +49,10 @@ commands:
     steps:
       - run:
           name: set ~/.terraformrc
-          command: secrethub inject -i tpl/terraformrc.tpl -o ~/.terraformrc
+          command: op inject -i tpl/terraformrc.tpl -o ~/.terraformrc
       - run:
           name: set << parameters.account >> environment variables
-          command: secrethub inject -i environments/<< parameters.account >>.auto.tfvars.json.tpl -o << parameters.account >>.auto.tfvars.json
+          command: op inject -i environments/<< parameters.account >>.auto.tfvars.json.tpl -o << parameters.account >>.auto.tfvars.json
       - run:
           name: set twdps.io gpg keys
           command: bash scripts/import_gpg_keys.sh
@@ -67,7 +67,7 @@ jobs:
       - image: << pipeline.parameters.executor-image >>
     environment:
       TF_WORKSPACE: << parameters.account >>
-    shell: secrethub run --env-file secrethub.<< parameters.account >>.env -- /bin/sh -eo pipefail
+    shell: op run --env-file op.<< parameters.account >>.env -- /bin/sh -eo pipefail
     parameters:
       account:
         description: nonprod or production account configuration
@@ -105,7 +105,7 @@ workflows:
       - terraform/plan:
           name: nonprod-change-plan
           context: << pipeline.parameters.context >>
-          shell: secrethub run --env-file secrethub.nonprod.env -- /bin/sh -eo pipefail
+          shell: op run --env-file op.nonprod.env -- /bin/sh -eo pipefail
           workspace: nonprod
           executor-image: << pipeline.parameters.executor-image >>
           terraform-version: << pipeline.parameters.terraform-version >>
@@ -123,7 +123,7 @@ workflows:
       - terraform/apply:
           name: nonprod-change-apply
           context: << pipeline.parameters.context >>
-          shell: secrethub run --env-file secrethub.nonprod.env -- /bin/sh -eo pipefail
+          shell: op run --env-file op.nonprod.env -- /bin/sh -eo pipefail
           workspace: nonprod
           executor-image: << pipeline.parameters.executor-image >>
           terraform-version: << pipeline.parameters.terraform-version >>
@@ -146,7 +146,7 @@ workflows:
       - terraform/plan:
           name: prod-change-plan
           context: << pipeline.parameters.context >>
-          shell: secrethub run --env-file secrethub.prod.env -- /bin/sh -eo pipefail
+          shell: op run --env-file op.prod.env -- /bin/sh -eo pipefail
           workspace: prod
           executor-image: << pipeline.parameters.executor-image >>
           terraform-version: << pipeline.parameters.terraform-version >>
@@ -164,7 +164,7 @@ workflows:
       - terraform/apply:
           name: prod-change-apply
           context: << pipeline.parameters.context >>
-          shell: secrethub run --env-file secrethub.prod.env -- /bin/sh -eo pipefail
+          shell: op run --env-file op.prod.env -- /bin/sh -eo pipefail
           workspace: prod
           executor-image: << pipeline.parameters.executor-image >>
           terraform-version: << pipeline.parameters.terraform-version >>
@@ -188,7 +188,7 @@ workflows:
       - executor-tools/release:
           name: release-lab-iam-profiles
           context: << pipeline.parameters.context >>
-          shell: secrethub run --env-file secrethub.nonprod.env -- /bin/sh -eo pipefail
+          shell: op run --env-file op.nonprod.env -- /bin/sh -eo pipefail
           filters: *on-tag-main
 
 
