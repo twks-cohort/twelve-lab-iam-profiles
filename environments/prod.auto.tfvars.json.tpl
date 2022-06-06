@@ -1,6 +1,6 @@
 {
   "create_iam_profiles": false,
-
+  "is_prod_account": true,
   "aws_default_region": "us-east-2",
   "aws_account_role": "DPSTerraformRole",
   "aws_account_id": "{{ op://empc-lab/aws-dps-1/aws-account-id }}",
