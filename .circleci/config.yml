@@ -82,7 +82,7 @@ jobs:
       - run:
           name: inject environment variables
           command: |
-            op inject -i op.nonprod.env -o $BASH_ENV
+            op inject -i op.<< parameters.account >>.env -o $BASH_ENV
             source $BASH_ENV
       - set-environment:
           account: << parameters.account >>
@@ -169,7 +169,7 @@ workflows:
             - run:
                 name: inject environment variables
                 command: |
-                  op inject -i op.nonprod.env -o $BASH_ENV
+                  op inject -i op.prod.env -o $BASH_ENV
                   source $BASH_ENV
             - set-environment:
                 account: prod
@@ -192,7 +192,7 @@ workflows:
             - run:
                 name: inject environment variables
                 command: |
-                  op inject -i op.nonprod.env -o $BASH_ENV
+                  op inject -i op.prod.env -o $BASH_ENV
                   source $BASH_ENV
             - set-environment:
                 account: prod
@@ -213,7 +213,7 @@ workflows:
       - executor-tools/release:
           name: release-lab-iam-profiles
           context: << pipeline.parameters.context >>
-          shell: op run --env-file op.nonprod.env -- /bin/sh -eo pipefail
+          shell: op run --env-file op.prod.env -- /bin/sh -eo pipefail
           filters: *on-tag-main
 
 
