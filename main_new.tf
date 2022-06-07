@@ -4,10 +4,6 @@ locals {
     "arn:aws:iam::${var.nonprod_account_id}:role/*"
   ]
 
-  prod_roles = [
-    "arn:aws:iam::${var.prod_account_id}:role/*",
-  ]
-
   all_roles = [
     "arn:aws:iam::${var.nonprod_account_id}:role/*",
     "arn:aws:iam::${var.prod_account_id}:role/*",
@@ -37,7 +33,7 @@ module "DPSProdServiceAccountGroup" {
   version = "~> 5.1"
 
   name = "DPSProdServiceAccountGroup"
-  assumable_roles = local.prod_roles
+  assumable_roles = local.all_roles
   group_users = [
     "DPSProdServiceAccount"
   ]

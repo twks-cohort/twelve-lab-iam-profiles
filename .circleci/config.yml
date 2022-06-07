@@ -105,7 +105,7 @@ jobs:
 workflows:
   version: 2
 
-  deploy-nonprod-profile-and-roles:
+  deploy-profile-and-roles-to-nonprod:
     jobs:
       - terraform/plan:
           name: nonprod-change-plan
@@ -157,7 +157,7 @@ workflows:
             - nonprod-change-apply
           filters: *on-push-main
 
-  deploy-prod-roles:
+  deploy-roles-to-prod:
     jobs:
       - terraform/plan:
           name: prod-change-plan
