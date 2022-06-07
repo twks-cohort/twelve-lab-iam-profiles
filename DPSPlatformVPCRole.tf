@@ -23,6 +23,7 @@ resource "aws_iam_policy" "DPSPlatformVPCRolePolicy" {
         "Action": [
         "ec2:Accept*",
         "ec2:AdvertiseByoipCidr",
+        "ec2:AllocateAddress",
         "ec2:AllocateIpamPoolCidr",
         "ec2:ApplySecurityGroupsToClientVpnTargetNetwork",
         "ec2:Assign*",
