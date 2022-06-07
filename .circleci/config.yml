@@ -213,7 +213,12 @@ workflows:
       - executor-tools/release:
           name: release-lab-iam-profiles
           context: << pipeline.parameters.context >>
-          shell: op run --env-file op.prod.env -- /bin/sh -eo pipefail
+          before-release:
+            - run:
+                name: inject environment variables
+                command: |
+                  op inject -i op.prod.env -o $BASH_ENV
+                  source $BASH_ENV
           filters: *on-tag-main
 
 
