@@ -8,10 +8,7 @@ locals {
     "arn:aws:iam::${var.nonprod_account_id}:role/*",
     "arn:aws:iam::${var.prod_account_id}:role/*",
   ]
-
-  trusted_accounts = var.is_prod_account ? ["arn:aws:iam::${var.nonprod_account_id}:group/DPSProdServiceAccountGroup"] : ["arn:aws:iam::${var.nonprod_account_id}:group/DPSNonprodServiceAccountGroup"]
 }
-
 
 # members of the nonprod service account group can assume any role in any non-production account
 module "DPSNonprodServiceAccountGroup" {
