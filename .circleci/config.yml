@@ -208,18 +208,18 @@ workflows:
             - prod-change-apply
           filters: *on-tag-main
 
-  generate-release-notes:
-    jobs:
-      - executor-tools/release:
-          name: release-lab-iam-profiles
-          context: << pipeline.parameters.context >>
-          before-release:
-            - run:
-                name: inject environment variables
-                command: |
-                  op inject -i op.prod.env -o $BASH_ENV
-                  source $BASH_ENV
-          filters: *on-tag-main
+  # generate-release-notes:
+  #   jobs:
+  #     - executor-tools/release:
+  #         name: release-lab-iam-profiles
+  #         context: << pipeline.parameters.context >>
+  #         before-release:
+  #           - run:
+  #               name: inject environment variables
+  #               command: |
+  #                 op inject -i op.prod.env -o $BASH_ENV
+  #                 source $BASH_ENV
+  #         filters: *on-tag-main
 
 
   nightly-iam-profiles-configuration-validation:
