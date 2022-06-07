@@ -104,8 +104,8 @@ jobs:
 
 workflows:
   version: 2
-  lab-iam-profiles-pipeline:
 
+  deploy-nonprod-profile-and-roles:
     jobs:
       - terraform/plan:
           name: nonprod-change-plan
@@ -157,7 +157,8 @@ workflows:
             - nonprod-change-apply
           filters: *on-push-main
 
-      # release
+  deploy-prod-roles:
+    jobs:
       - terraform/plan:
           name: prod-change-plan
           context: << pipeline.parameters.context >>
