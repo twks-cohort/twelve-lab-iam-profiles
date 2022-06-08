@@ -3,6 +3,7 @@ version: 2.1
 
 orbs:
   terraform: twdps/terraform@0.5.0
+  op: twdps/onepassword@dev:latest
   # used for github-release-notes feature
   executor-tools: twdps/executor-tools@0.8.0
 
@@ -47,6 +48,8 @@ commands:
         description: account to be configured
         type: string
     steps:
+      - op/env:
+          env-file: << parameters.account >>
       - run:
           name: set ~/.terraformrc
           command: op inject -i tpl/terraformrc.tpl -o ~/.terraformrc
@@ -79,11 +82,13 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
-      - run:
-          name: inject environment variables
-          command: |
-            op inject -i op.<< parameters.account >>.env -o $BASH_ENV
-            source $BASH_ENV
+      - op/env:
+          env-file: << parameters.account >>
+      # - run:
+      #     name: inject environment variables
+      #     command: |
+      #       op inject -i op.<< parameters.account >>.env -o $BASH_ENV
+      #       source $BASH_ENV
       - set-environment:
           account: << parameters.account >>
       - run:
@@ -115,11 +120,11 @@ workflows:
           executor-image: << pipeline.parameters.executor-image >>
           terraform-version: << pipeline.parameters.terraform-version >>
           before-terraform:
-            - run:
-                name: inject environment variables
-                command: |
-                  op inject -i op.nonprod.env -o $BASH_ENV
-                  source $BASH_ENV
+            # - run:
+            #     name: inject environment variables
+            #     command: |
+            #       op inject -i op.nonprod.env -o $BASH_ENV
+            #       source $BASH_ENV
             - set-environment:
                 account: nonprod
           filters: *on-push-main
