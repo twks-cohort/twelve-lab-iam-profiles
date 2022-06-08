@@ -83,7 +83,7 @@ jobs:
       - checkout
       - setup_remote_docker
       - op/env:
-          env-file: << parameters.account >>
+          env-file: op.<< parameters.account >>.env
       # - run:
       #     name: inject environment variables
       #     command: |
