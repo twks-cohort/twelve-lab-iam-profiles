@@ -49,7 +49,7 @@ commands:
         type: string
     steps:
       - op/env:
-          env-file: << parameters.account >>
+          env-file: op.<< parameters.account >>.env
       - run:
           name: set ~/.terraformrc
           command: op inject -i tpl/terraformrc.tpl -o ~/.terraformrc
@@ -82,8 +82,6 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
-      - op/env:
-          env-file: op.<< parameters.account >>.env
       # - run:
       #     name: inject environment variables
       #     command: |
