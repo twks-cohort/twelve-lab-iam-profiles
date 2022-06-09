@@ -107,7 +107,7 @@ workflows:
       - do/datadog-event:
           handle: nic
           priority: low
-          tags: {"event:deploy"}
+          tags: "{\"event:deploy\"}"
           no-host: true
           device: my-device
           aggregation-key: my-key
