@@ -12,6 +12,7 @@
 	</p>
 </div>
 
+
 This iam-profiles pipeline implements a secure, single platform team identity pattern that is assumed to be part of a broader product-centered identity architecture.  
 
 While the number of team-bounded domains in a delivery infrastructure platform will likely grow from just one (depending on the number of development teams using the platform), a essential pattern for securing the permission boundary for _Users_ of the product involves seprating such user's identity, and authentication and authorization events, from the underlying IaaS providers native infrastructure identity.  
