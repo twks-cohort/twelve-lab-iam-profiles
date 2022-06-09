@@ -4,7 +4,7 @@ version: 2.1
 orbs:
   terraform: twdps/terraform@0.6.0
   op: twdps/onepassword@1.0.0
-  do: twdps/pipeline-events@dev:latest
+  do: twdps/pipeline-events@0.1.0
 
 # ==== global pipeline parameters
 
@@ -114,11 +114,6 @@ workflows:
           before-terraform:
             - set-environment:
                 account: nonprod
-          after-terraform:
-            - do/circle-deploy
-            - do/slack-webhook:
-                message: test pipeline event messaging
-                webhook-url: $LAB_EVENTS_CHANNEL_WEBHOOK
           filters: *on-push-main
 
       - approve-nonprod-changes:
@@ -139,6 +134,9 @@ workflows:
                 account: nonprod
           after-terraform:
             - do/circle-deploy
+            - do/slack-webhook:
+                message: lab-iam-profile nonprod deployment
+                webhook-url: $LAB_EVENTS_CHANNEL_WEBHOOK
           requires:
             - approve-nonprod-changes
           filters: *on-push-main
@@ -181,6 +179,11 @@ workflows:
           before-terraform:
             - set-environment:
                 account: prod
+          after-terraform:
+            - do/circle-deploy
+            - do/slack-webhook:
+                message: lab-iam-profile prod release
+                webhook-url: $LAB_EVENTS_CHANNEL_WEBHOOK
           requires:
             - approve-prod-changes
           filters: *on-tag-main
