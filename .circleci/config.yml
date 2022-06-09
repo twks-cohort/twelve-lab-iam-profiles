@@ -106,7 +106,6 @@ workflows:
     jobs:
       - do/datadog-event:
           context: twdps-core-labs-team
-          shell: op run --env-file op.nonprod.env -- /bin/bash -eo pipefail
           handle: nic
           priority: low
           tags: "{\"event:deploy\"}"
@@ -117,6 +116,9 @@ workflows:
           alert-type: error
           title: "test dd-event"
           message: "this was a test"
+          before-event:
+            - op/env:
+                env-file: op.nonprod.env
 
       - terraform/plan:
           name: nonprod-change-plan
