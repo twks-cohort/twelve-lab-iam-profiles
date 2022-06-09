@@ -104,7 +104,7 @@ workflows:
 
   deploy-profile-and-roles-to-nonprod:
     jobs:
-      - datadog-event:
+      - do/datadog-event:
           handle: nic
           priority: low
           tags: {"event:deploy"}
