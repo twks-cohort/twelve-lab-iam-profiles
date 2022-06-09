@@ -7,11 +7,10 @@
 		<a href="https://aws.amazon.com"><img src="https://img.shields.io/badge/-deployed-blank.svg?style=social&logo=amazon"></a>
 		<br />
 		<h3>lab-iam-profiles</h3>
-		</a> <a href="https://app.circleci.com/pipelines/github/ThoughtWorks-DPS/circleci-remote-docker"><img src="https://circleci.com/gh/ThoughtWorks-DPS/circleci-remote-docker.svg?style=shield"></a>
+		</a> <a href="https://app.circleci.com/pipelines/github/ThoughtWorks-DPS/lab-iam-profiles"><img src="https://circleci.com/gh/ThoughtWorks-DPS/lab-iam-profiles.svg?style=shield"></a>
 		<a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/github/license/ThoughtWorks-DPS/circleci-remote-docker"></a>
 	</p>
 </div>
-
 
 This iam-profiles pipeline implements a secure, single platform team identity pattern that is assumed to be part of a broader product-centered identity architecture.  
 
