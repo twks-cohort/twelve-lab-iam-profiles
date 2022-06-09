@@ -104,23 +104,6 @@ workflows:
 
   deploy-profile-and-roles-to-nonprod:
     jobs:
-      - do/datadog-event:
-          context: twdps-core-labs-team
-          handle: nic
-          priority: low
-          tags: "{\"event:deploy\"}"
-          no-host: true
-          device: my-device
-          aggregation-key: my-key
-          event-type: my-event-type
-          alert-type: error
-          title: "test dd-event"
-          message: "this was a test"
-          before-event:
-            - op/env:
-                env-file: op.nonprod.env
-
-
       - terraform/plan:
           name: nonprod-change-plan
           context: << pipeline.parameters.context >>
@@ -133,6 +116,8 @@ workflows:
                 account: nonprod
           after-terraform:
             - do/circle-deploy
+            - do/slack-webhook:
+                message: test pipeline event messaging
           filters: *on-push-main
 
       - approve-nonprod-changes:
