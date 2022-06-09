@@ -104,6 +104,18 @@ workflows:
 
   deploy-profile-and-roles-to-nonprod:
     jobs:
+      - datadog-event:
+          handle: nic
+          priority: low
+          tags: {"event:deploy"}
+          no-host: true
+          device: my-device
+          aggregation-key: my-key
+          event-type: my-event-type
+          alert-type: error
+          title: "test dd-event"
+          message: "this was a test"
+
       - terraform/plan:
           name: nonprod-change-plan
           context: << pipeline.parameters.context >>
