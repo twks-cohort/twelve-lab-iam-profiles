@@ -118,6 +118,7 @@ workflows:
             - do/circle-deploy
             - do/slack-webhook:
                 message: test pipeline event messaging
+                webhook-url: $LAB_EVENTS_CHANNEL_WEBHOOK
           filters: *on-push-main
 
       - approve-nonprod-changes:
