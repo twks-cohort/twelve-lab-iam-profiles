@@ -102,7 +102,6 @@ arn:aws:iam::*:role/DPSIamProfilesRole
 arn:aws:iam::*:role/DPSPlatformEksBaseRole  
 arn:aws:iam::*:role/DPSPlatformEksCoreServicesRole  
 
-
 ## DataDog
 
 The aws account core integration to datadog is a external-id based role. This is a single role per aws account and in the lab is managed by this repo/pipeline.  
