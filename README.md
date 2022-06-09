@@ -107,6 +107,7 @@ arn:aws:iam::*:role/DPSPlatformEksCoreServicesRole
 
 The aws account core integration to datadog is a external-id based role. This is a single role per aws account and in the lab is managed by this repo/pipeline.  
 
+
 #### Dependencies
 
 Internal developer guides and run-books for DPS lab environments are [here](https://github.com/ThoughtWorks-DPS/documentation-internal).  
