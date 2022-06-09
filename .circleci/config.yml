@@ -114,6 +114,8 @@ workflows:
           before-terraform:
             - set-environment:
                 account: nonprod
+          after-terraform:
+            - do/circle-deploy
           filters: *on-push-main
 
       - approve-nonprod-changes:
