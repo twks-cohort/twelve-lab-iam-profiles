@@ -2,7 +2,7 @@
 version: 2.1
 
 orbs:
-  terraform: twdps/terraform@dev:latest
+  terraform: twdps/terraform@0.6.0
   op: twdps/onepassword@1.0.0
   do: twdps/pipeline-events@dev:latest
 
@@ -133,7 +133,6 @@ workflows:
             - set-environment:
                 account: nonprod
           after-terraform:
-            - do/install-dd
             - do/circle-deploy
           requires:
             - approve-nonprod-changes
