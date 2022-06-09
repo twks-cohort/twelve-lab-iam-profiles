@@ -197,7 +197,6 @@ workflows:
   #         on-tag: true
   #         filters: *on-tag-main
 
-
   nightly-iam-profiles-configuration-validation:
     triggers:
       - schedule:
