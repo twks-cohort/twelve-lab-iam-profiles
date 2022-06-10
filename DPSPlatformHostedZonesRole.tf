@@ -27,7 +27,6 @@ resource "aws_iam_policy" "DPSPlatformHostedZonesRolePolicy" {
         "route53:ChangeCidrCollection",
         "route53:ChangeResourceRecordSets",
         "route53:ChangeTagsForResource",
-        "route53:GetChange",
         "route53:CreateCidrCollection",
         "route53:CreateHealthCheck",
         "route53:CreateHostedZone",
