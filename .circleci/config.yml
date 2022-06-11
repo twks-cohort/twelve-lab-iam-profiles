@@ -61,7 +61,7 @@ commands:
 
 jobs:
 
-  test-configuration-and-write-credentials:
+  validate configuration and store profile credentials:
     description: |
       bats tests of the resulting infrastructure resources and write the service accounts
       credentials when successful during create_iam_profiles run.
@@ -102,10 +102,10 @@ jobs:
 workflows:
   version: 2
 
-  deploy-profile-and-roles-to-nonprod:
+  deploy profiles and roles to nonprod:
     jobs:
       - terraform/plan:
-          name: nonprod-change-plan
+          name: nonprod change plan
           context: << pipeline.parameters.context >>
           shell: op run --env-file op.nonprod.env -- /bin/bash -eo pipefail
           workspace: nonprod
@@ -116,14 +116,14 @@ workflows:
                 account: nonprod
           filters: *on-push-main
 
-      - approve-nonprod-changes:
+      - approve nonprod changes:
           type: approval
           requires:
-            - nonprod-change-plan
+            - nonprod change plan
           filters: *on-push-main
 
       - terraform/apply:
-          name: nonprod-change-apply
+          name: apply nonprod changes
           context: << pipeline.parameters.context >>
           shell: op run --env-file op.nonprod.env -- /bin/bash -eo pipefail
           workspace: nonprod
@@ -138,21 +138,21 @@ workflows:
                 message: lab-iam-profile nonprod deployment
                 webhook-url: $LAB_EVENTS_CHANNEL_WEBHOOK
           requires:
-            - approve-nonprod-changes
+            - approve nonprod changes
           filters: *on-push-main
 
-      - test-configuration-and-write-credentials:
-          name: test-nonprod-iam-configuration
+      - validate configuration and store profile credentials:
+          name: test nonprod iam profiles configuration
           context: << pipeline.parameters.context >>
           account: nonprod
           requires:
-            - nonprod-change-apply
+            - apply nonprod changes
           filters: *on-push-main
 
-  deploy-roles-to-prod:
+  deploy roles to prod:
     jobs:
       - terraform/plan:
-          name: prod-change-plan
+          name: prod change plan
           context: << pipeline.parameters.context >>
           shell: op run --env-file op.prod.env -- /bin/bash -eo pipefail
           workspace: prod
@@ -163,14 +163,14 @@ workflows:
                 account: prod
           filters: *on-tag-main
 
-      - approve-prod-changes:
+      - approve prod changes:
           type: approval
           requires:
-            - prod-change-plan
+            - prod change plan
           filters: *on-tag-main
 
       - terraform/apply:
-          name: prod-change-apply
+          name: apply prod changes
           context: << pipeline.parameters.context >>
           shell: op run --env-file op.prod.env -- /bin/bash -eo pipefail
           workspace: prod
@@ -185,15 +185,15 @@ workflows:
                 message: lab-iam-profile prod release
                 webhook-url: $LAB_EVENTS_CHANNEL_WEBHOOK
           requires:
-            - approve-prod-changes
+            - approve prod changes
           filters: *on-tag-main
 
-      - test-configuration-and-write-credentials:
-          name: test-prod-iam-configuration
+      - validate configuration and store profile credentials:
+          name: test prod iam profiles configuration
           context: << pipeline.parameters.context >>
           account: prod
           requires:
-            - prod-change-apply
+            - apply prod changes
           filters: *on-tag-main
 
   # generate-release-notes:
@@ -205,7 +205,7 @@ workflows:
   #         on-tag: true
   #         filters: *on-tag-main
 
-  nightly-iam-profiles-configuration-validation:
+  nightly iam profiles configuration validation:
     triggers:
       - schedule:
           cron: "0 1 * * *"
@@ -214,13 +214,13 @@ workflows:
               only:
                 - main
     jobs:
-      - test-configuration-and-write-credentials:
-          name: nightly-nonprod-iam-profiles-validation
+      - validate configuration and store profile credentials:
+          name: nightly nonprod iam profiles validation
           context: << pipeline.parameters.context >>
           account: nonprod
           test-only: true
-      - test-configuration-and-write-credentials:
-          name: nightly-prod-iam-profiles-validation
+      - validate configuration and store profile credentials:
+          name: nightly prod iam profiles validation
           context: << pipeline.parameters.context >>
           account: prod
           test-only: true
