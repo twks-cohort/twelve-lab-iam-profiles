@@ -158,6 +158,7 @@ resource "aws_iam_policy" "DPSPlatformVPCRolePolicy" {
         "rds:CreateDBSubnetGroup",
         "rds:ModifyDBSubnetGroup",
         "rds:DeleteDBSubnetGroup",
+        "rds:DescribeDBSubnetGroups",
         "rds:AddTagsToResource",
         "rds:ListTagsForResource",
         "rds:RemoveTagsFromResource",
