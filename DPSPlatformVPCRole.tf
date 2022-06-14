@@ -34,7 +34,6 @@ resource "aws_iam_policy" "DPSPlatformVPCRolePolicy" {
         "ec2:CreateClientVpnRoute",
         "ec2:CreateCoipPoolPermission",
         "ec2:CreateCustomerGateway",
-        "ec2:CreateDBSubnetGroup",
         "ec2:CreateDhcpOptions",
         "ec2:CreateEgressOnlyInternetGateway",
         "ec2:CreateFlowLogs",
@@ -57,7 +56,6 @@ resource "aws_iam_policy" "DPSPlatformVPCRolePolicy" {
         "ec2:DeleteClientVpnRoute",
         "ec2:DeleteCoipPoolPermission",
         "ec2:DeleteCustomerGateway",
-        "ec2:DeleteDBSubnetGroup",
         "ec2:DeleteDhcpOptions",
         "ec2:DeleteEgressOnlyInternetGateway",
         "ec2:DeleteFlowLogs",
@@ -107,7 +105,6 @@ resource "aws_iam_policy" "DPSPlatformVPCRolePolicy" {
         "ec2:ModifyAddressAttribute",
         "ec2:ModifyAvailabilityZoneGroup",
         "ec2:ModifyClientVpnEndpoint",
-        "ec2:ModifyDBSubnetGroup",
         "ec2:ModifyEbsDefaultKmsKeyId",
         "ec2:ModifyId*",
         "ec2:ModifyIpam*",
@@ -157,7 +154,10 @@ resource "aws_iam_policy" "DPSPlatformVPCRolePolicy" {
         "ec2:UnmonitorInstances",
         "ec2:UpdateSecurityGroupRuleDescriptionsEgress",
         "ec2:UpdateSecurityGroupRuleDescriptionsIngress",
-        "ec2:WithdrawByoipCidr"
+        "ec2:WithdrawByoipCidr",
+        "rds:CreateDBSubnetGroup",
+        "rds:ModifyDBSubnetGroup",
+        "rds:DeleteDBSubnetGroup",
         ]
         "Effect": "Allow"
         "Resource": "*"
