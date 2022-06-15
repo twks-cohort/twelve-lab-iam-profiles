@@ -158,7 +158,8 @@ resource "aws_iam_policy" "DPSPlatformEksBaseRolePolicy" {
         "kms:TagResource",
         "kms:CreateAlias",
         "kms:DeleteAlias",
-        "kms:ListAliases"
+        "kms:ListAliases",
+        "ssm:GetParameter"
         ]
         "Effect": "Allow"
         "Resource": "*"

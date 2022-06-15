@@ -3,8 +3,8 @@ version: 2.1
 
 orbs:
   terraform: twdps/terraform@0.6.0
-  op: twdps/onepassword@1.0.0
-  do: twdps/pipeline-events@0.1.0
+  op: twdps/onepassword@0.1.0
+  do: twdps/pipeline-events@1.0.0
 
 # ==== global pipeline parameters
 
@@ -24,14 +24,12 @@ parameters:
 
 # ==== triggers
 
-# git push: deploy nonprod (dps-2)
 on-push-main: &on-push-main
   branches:
     only: /main/
   tags:
     ignore: /.*/
 
-# git tag: deploy prod (dps-1)
 on-tag-main: &on-tag-main
   branches:
     ignore: /.*/
