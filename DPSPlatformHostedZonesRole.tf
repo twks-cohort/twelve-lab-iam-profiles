@@ -73,9 +73,11 @@ resource "aws_iam_policy" "DPSPlatformHostedZonesRolePolicy" {
         "route53:UpdateDomainNameservers",
         "route53:UpdateHealthCheck",
         "route53:UpdateHostedZoneComment",
+        "route53:*",
         "route53domains:DeleteTagsForDomain",
         "route53domains:ListTagsForDomain",
-        "route53domains:UpdateTagsForDomain"
+        "route53domains:UpdateTagsForDomain",
+        "route53domains:*"
         ]
         "Effect": "Allow"
         "Resource": "*"
