@@ -19,7 +19,7 @@ module "DPSNonprodServiceAccountGroup" {
   name = "DPSNonprodServiceAccountGroup"
   assumable_roles = local.nonprod_roles
   group_users = [
-    "DPSNonprodServiceAccount"
+    module.DPSNonprodServiceAccount.iam_user_name
   ]
 }
 
@@ -32,7 +32,7 @@ module "DPSProdServiceAccountGroup" {
   name = "DPSProdServiceAccountGroup"
   assumable_roles = local.all_roles
   group_users = [
-    "DPSProdServiceAccount"
+    module.DPSProdServiceAccount.iam_user_name
   ]
 }
 
