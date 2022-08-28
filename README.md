@@ -114,3 +114,5 @@ Internal developer guides and run-books for DPS lab environments are [here](http
 * terraform cloud (backend state store)
 * circleci (pipeline orchestration)
   * dockerhub (pipeline executors)
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/ThoughtWorks-DPS/lab-iam-profiles
