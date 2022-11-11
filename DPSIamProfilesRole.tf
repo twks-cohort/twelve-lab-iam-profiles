@@ -98,7 +98,8 @@ resource "aws_iam_policy" "DPSIamProfilesRolePolicy" {
           "iam:UpdateSSHPublicKey",
           "iam:UpdateUser",
           "iam:UploadSSHPublicKey",
-          "iam:Tag*"
+          "iam:Tag*",
+          "iam:ListMFADevices"
         ]
         "Effect": "Allow"
         "Resource": "*"

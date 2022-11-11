@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-export OP_CONNECT_VAULT=empc-lab
 
 terraform init
 # secrethub run -- terraform output DPSSimpleServiceAccount_encrypted_aws_secret_access_key | base64 -d | gpg -dq --passphrase ${GPG_KEY_PASSPHRASE} | secrethub write twdps/di/svc/aws/dps-2/DPSSimpleServiceAccount/aws-secret-access-key
