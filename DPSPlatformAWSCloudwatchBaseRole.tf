@@ -21,11 +21,11 @@ resource "aws_iam_policy" "DPSPlatformAWSCloudwatchBaseRolePolicy" {
     "Statement": [
       {
         "Action": [
-          "kms:CreateKey",
+          "kms:Create*",
           "kms:Decrypt",
           "kms:DescribeKey",
           "kms:Encrypt",
-          "kms:GenerateDataKey",
+          "kms:Generate*",
           "kms:Get*",
           "kms:ListKeys",
           "kms:Put*",
