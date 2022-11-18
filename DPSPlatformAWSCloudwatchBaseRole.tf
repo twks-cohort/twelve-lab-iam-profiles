@@ -33,7 +33,8 @@ resource "aws_iam_policy" "DPSPlatformAWSCloudwatchBaseRolePolicy" {
           "kms:ListKeyPolicies",
           "kms:ScheduleKeyDeletion",
           "sns:*",
-          "lambda:*"
+          "lambda:*",
+          "ec2:Describe*"
         ]
         "Effect": "Allow"
         "Resource": "*"
