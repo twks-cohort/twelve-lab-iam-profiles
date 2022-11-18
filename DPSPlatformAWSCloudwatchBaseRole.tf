@@ -46,6 +46,7 @@ resource "aws_iam_policy" "DPSPlatformAWSCloudwatchBaseRolePolicy" {
           "iam:DeleteRole*",
           "iam:AttachRolePolicy",
           "iam:PassRole",
+          "iam:DetachRolePolicy",
           "cloudformation:Describe*",
           "cloudformation:List*",
           "cloudwatch:List*",
