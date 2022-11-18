@@ -21,7 +21,6 @@ resource "aws_iam_policy" "DPSPlatformAWSCloudwatchBaseRolePolicy" {
     "Statement": [
       {
         "Action": [
-          "kms:*",
           "kms:CreateKey",
           "kms:Decrypt",
           "kms:DescribeKey",
@@ -30,7 +29,7 @@ resource "aws_iam_policy" "DPSPlatformAWSCloudwatchBaseRolePolicy" {
           "kms:GetKeyPolicy",
           "kms:ListKeys",
           "kms:PutKeyPolicy",
-          "kms:ListKeyPolicies",
+          "kms:List*",
           "kms:ScheduleKeyDeletion",
           "sns:*",
           "lambda:*",
@@ -47,7 +46,16 @@ resource "aws_iam_policy" "DPSPlatformAWSCloudwatchBaseRolePolicy" {
           "iam:Untag*",
           "iam:List*",
           "iam:DeleteRole*",
-          "iam:AttachRolePolicy"
+          "iam:AttachRolePolicy",
+          "cloudformation:Describe*",
+          "cloudformation:List*",
+          "cloudwatch:List*",
+          "cloudwatch:GetMetricData",
+          "states:DescribeStateMachine",
+          "states:ListStateMachines",
+          "tag:GetResources",
+          "xray:GetTraceSummaries",
+          "xray:BatchGetTraces"
         ]
         "Effect": "Allow"
         "Resource": "*"
