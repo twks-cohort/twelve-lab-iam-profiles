@@ -42,7 +42,9 @@ resource "aws_iam_policy" "DPSPlatformAWSCloudwatchBaseRolePolicy" {
           "iam:CreateRole",
           "iam:GetPolicy",
           "iam:CreatePolicy",
-          "iam:GetPolicyVersion"
+          "iam:GetPolicyVersion",
+          "iam:Tag*",
+          "iam:Untag*"
         ]
         "Effect": "Allow"
         "Resource": "*"
