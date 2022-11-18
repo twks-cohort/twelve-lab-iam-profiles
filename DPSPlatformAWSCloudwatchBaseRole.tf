@@ -38,7 +38,10 @@ resource "aws_iam_policy" "DPSPlatformAWSCloudwatchBaseRolePolicy" {
           "logs:Create*",
           "logs:Describe*",
           "logs:List*",
-          "logs:Delete*"
+          "logs:Delete*",
+          "iam:CreateRole",
+          "iam:GetPolicy",
+          "iam:CreatePolicy"
         ]
         "Effect": "Allow"
         "Resource": "*"
