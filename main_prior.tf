@@ -24,7 +24,7 @@ module "DPSSimpleServiceAccount" {
   version = "= 4.7.0"
 
   name                          = "DPSSimpleServiceAccount"
-  create_iam_access_key         = false
+  create_iam_access_key         = true
   create_iam_user_login_profile = false
   pgp_key                       = var.twdpsio_gpg_public_key_base64
   force_destroy                 = true

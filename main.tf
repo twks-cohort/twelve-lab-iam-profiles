@@ -60,7 +60,7 @@ module "DPSNonprodServiceAccount" {
   version = "~> 5.1"
 
   name                          = "DPSNonprodServiceAccount"
-  create_iam_access_key         = false
+  create_iam_access_key         = true
   create_iam_user_login_profile = false
   pgp_key                       = var.twdpsio_gpg_public_key_base64
   force_destroy                 = true
@@ -87,7 +87,7 @@ module "DPSProdServiceAccount" {
   version = "~> 5.1"
 
   name                          = "DPSProdServiceAccount"
-  create_iam_access_key         = false
+  create_iam_access_key         = true
   create_iam_user_login_profile = false
   pgp_key                       = var.twdpsio_gpg_public_key_base64
   force_destroy                 = true
