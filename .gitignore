@@ -6,3 +6,4 @@ local.env
 .public.key
 .terraform.lock.hcl
 Pipfile.lock
+prod.env
