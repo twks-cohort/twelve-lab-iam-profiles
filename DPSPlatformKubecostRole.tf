@@ -21,7 +21,28 @@ resource "aws_iam_policy" "DPSPlatformKubecostRolePolicy" {
     "Statement": [
       {
         "Action": [
-          "iam:ListUsers"
+          "athena:*",
+          "glue:GetDatabase*",
+          "glue:GetTable*",
+          "glue:GetPartition*",
+          "glue:GetUserDefinedFunction",
+          "glue:BatchGetPartition",
+          "s3:GetBucketLocation",
+          "s3:GetObject",
+          "s3:ListBucket",
+          "s3:ListBucketMultipartUploads",
+          "s3:ListMultipartUploadParts",
+          "s3:AbortMultipartUpload",
+          "s3:CreateBucket",
+          "s3:PutObject",
+          "kms:Encrypt",
+          "kms:Descrypt",
+          "kms:ReEncrypt*",
+          "kms:GenerateDataKey*",
+          "kms:DescribeKey",
+          "s3:Get*",
+          "s3:List*",
+          "eks:DescribeCluster"
         ]
         "Effect": "Allow"
         "Resource": "*"
