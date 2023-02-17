@@ -21,7 +21,7 @@ resource "aws_iam_policy" "DPSPlatformKubecostRolePolicy" {
     "Statement": [
       {
         "Action": [
-
+          "iam:ListUsers"
         ]
         "Effect": "Allow"
         "Resource": "*"
