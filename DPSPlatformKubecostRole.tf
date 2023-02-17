@@ -3,7 +3,7 @@ module "DPSPlatformKubecostRole" {
   version     = "~> 5.1"
   create_role = true
 
-  role_name                         = "DPSPlatformKubecostRole"
+  role_name                         = "DpsPlatformKubecostRole"
   role_requires_mfa                 = false
   custom_role_policy_arns           = [aws_iam_policy.DPSPlatformKubecostRolePolicy.arn]
   number_of_custom_role_policy_arns = 1
