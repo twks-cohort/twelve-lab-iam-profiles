@@ -44,7 +44,7 @@ resource "aws_iam_policy" "DPSPlatformKubecostRolePolicy" {
           "s3:List*",
           "eks:DescribeCluster",
           "iam:ListOpenIDConnectProviders",
-          "iam:GetOpenIDConnectProvider
+          "iam:GetOpenIDConnectProvider"
         ]
         "Effect": "Allow"
         "Resource": "*"
