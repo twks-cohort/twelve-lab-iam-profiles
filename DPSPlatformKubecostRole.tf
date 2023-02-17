@@ -27,6 +27,7 @@ resource "aws_iam_policy" "DPSPlatformKubecostRolePolicy" {
           "glue:GetPartition*",
           "glue:GetUserDefinedFunction",
           "glue:BatchGetPartition",
+          "glue:CreateDatabase",
           "s3:GetBucketLocation",
           "s3:GetObject",
           "s3:ListBucket",
@@ -40,11 +41,14 @@ resource "aws_iam_policy" "DPSPlatformKubecostRolePolicy" {
           "kms:ReEncrypt*",
           "kms:GenerateDataKey*",
           "kms:DescribeKey",
+          "kms:TagResource",
           "s3:Get*",
           "s3:List*",
           "eks:DescribeCluster",
           "iam:ListOpenIDConnectProviders",
-          "iam:GetOpenIDConnectProvider"
+          "iam:GetOpenIDConnectProvider",
+          "iam:CreateRole",
+          "logs:CreateLogGroup"
         ]
         "Effect": "Allow"
         "Resource": "*"
