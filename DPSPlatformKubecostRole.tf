@@ -49,7 +49,10 @@ resource "aws_iam_policy" "DPSPlatformKubecostRolePolicy" {
           "iam:ListOpenIDConnectProviders",
           "iam:GetOpenIDConnectProvider",
           "iam:CreateRole",
-          "logs:CreateLogGroup"
+          "iam:GetRole",
+          "logs:CreateLogGroup",
+          "logs:DescribeLogGroups",
+          "logs:Create"
         ]
         "Effect": "Allow"
         "Resource": "*"
