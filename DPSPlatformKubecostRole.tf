@@ -36,6 +36,7 @@ resource "aws_iam_policy" "DPSPlatformKubecostRolePolicy" {
           "s3:AbortMultipartUpload",
           "s3:CreateBucket",
           "s3:PutObject",
+          "s3:DeleteBucket",
           "kms:Encrypt",
           "kms:Descrypt",
           "kms:ReEncrypt*",
