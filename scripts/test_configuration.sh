@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 export ENVIRONMENT=$1
-export AWS_ACCOUNT_ID=$(cat ${ENVIRONMENT}.auto.tfvars.json | jq -r .account_id)
+export AWS_ACCOUNT_ID=$(cat ${ENVIRONMENT}.auto.tfvars.json | jq -r .aws_account_id)
 
 aws sts assume-role --output json --role-arn arn:aws:iam::${AWS_ACCOUNT_ID}:role/DPSIamProfilesRole --role-session-name awspec-test > credentials
 
