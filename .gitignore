@@ -7,3 +7,4 @@ local.env
 .terraform.lock.hcl
 Pipfile.lock
 prod.env
+.idea
