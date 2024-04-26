@@ -9,5 +9,5 @@
   "assume_role": "DPSIamProfilesRole",
   "account_id": "{{ op://cohorts/twelve-aws/aws-account-id }}",
   "nonprod_account_id": "{{ op://cohorts/twelve-aws/aws-account-id }}",
-  "twdpsio_gpg_public_key_base64": "{{ op://cohorts/twelve-svc-gpg/public-key-base64 }}"
+  "twdpsio_gpg_public_key_base64": "{{ op://cohorts/alpha-svc-gpg/public-key-base64 }}"
 }

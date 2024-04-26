@@ -1,1 +1,1 @@
-op://cohorts/twelve-svc-gpg/public-key
+op://cohorts/alpha-svc-gpg/public-key
