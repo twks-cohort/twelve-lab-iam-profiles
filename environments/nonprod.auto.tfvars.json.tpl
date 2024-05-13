@@ -1,11 +1,11 @@
 {
   "create_iam_profiles": true,
   "is_prod_account": false,
-  "aws_default_region": "us-east-2",
+  "aws_default_region": "ap-southeast-2",
   "aws_account_role": "DPSIamProfilesRole",
   "aws_account_id": "{{ op://cohorts/twelve-aws/aws-account-id }}",
 
-  "aws_region": "us-east-2",
+  "aws_region": "ap-southeast-2",
   "assume_role": "DPSIamProfilesRole",
   "account_id": "{{ op://cohorts/twelve-aws/aws-account-id }}",
   "nonprod_account_id": "{{ op://cohorts/twelve-aws/aws-account-id }}",
